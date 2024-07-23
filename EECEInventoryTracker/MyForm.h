@@ -180,7 +180,7 @@ namespace EECEInventoryTracker {
 			this->ForeColor = System::Drawing::SystemColors::ActiveCaptionText;
 			this->Name = L"MyForm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-			this->Text = L"MyForm";
+			this->Text = L"Sign in to EECE Inventory Tracker";
 			this->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::MyForm_MouseDown);
 			this->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::MyForm_MouseMove);
 			this->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::MyForm_MouseUp);
