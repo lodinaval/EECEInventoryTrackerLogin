@@ -112,6 +112,7 @@ namespace EECEInventoryTracker {
 			this->textBox1->Name = L"textBox1";
 			this->textBox1->Size = System::Drawing::Size(200, 25);
 			this->textBox1->TabIndex = 0;
+			this->textBox1->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MyForm::textBox1_KeyDown);
 			// 
 			// panel1
 			// 
@@ -141,6 +142,8 @@ namespace EECEInventoryTracker {
 			this->textBox2->Name = L"textBox2";
 			this->textBox2->Size = System::Drawing::Size(200, 25);
 			this->textBox2->TabIndex = 4;
+			this->textBox2->UseSystemPasswordChar = true;
+			this->textBox2->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MyForm::textBox2_KeyDown);
 			// 
 			// button1
 			// 
@@ -178,6 +181,9 @@ namespace EECEInventoryTracker {
 			this->Name = L"MyForm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"MyForm";
+			this->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::MyForm_MouseDown);
+			this->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::MyForm_MouseMove);
+			this->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::MyForm_MouseUp);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -191,7 +197,34 @@ namespace EECEInventoryTracker {
 			Form::Close();
 		}
 		else
-			MessageBox::Show("Username or password is incorrect. Please try again", "EECE Inventory Tracker", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+			MessageBox::Show("Username or password is incorrect.", "EECE Inventory Tracker", MessageBoxButtons::OK, MessageBoxIcon::Error);
+	}
+		   bool dragging;
+		   Point offset;
+private: System::Void MyForm_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+	dragging = true;
+	offset.X = e->X;
+	offset.Y = e->Y;
+}
+private: System::Void MyForm_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+	if (dragging) {
+		Point currentScreenPosition;
+		currentScreenPosition = PointToScreen(Point(e->X, e->Y));
+		Location = Point(currentScreenPosition.X - offset.X, currentScreenPosition.Y - offset.Y);
+	}
+}
+private: System::Void MyForm_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+	dragging = false;
+}
+private: System::Void textBox1_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
+	if (e->KeyValue == (int)Keys::Enter) {
+		textBox2->Focus();
+	}
+}
+private: System::Void textBox2_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
+	if (e->KeyValue == (int)Keys::Enter) {
+		button1->PerformClick();
+	}
 	}
 };
 }
