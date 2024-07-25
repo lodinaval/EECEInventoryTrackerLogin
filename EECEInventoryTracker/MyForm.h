@@ -1,7 +1,9 @@
 #pragma once
 #include <fstream>
-#include <string>
-#include <unordered_map>
+#include <iostream>
+#include <msclr/marshal_cppstd.h>
+#include "InventoryManagerUI.h"
+#include "Student.h"
 
 namespace EECEInventoryTracker {
 
@@ -32,32 +34,33 @@ namespace EECEInventoryTracker {
 
     private:
         System::Collections::Generic::Dictionary<String^, String^>^ credentials;
-        System::ComponentModel::Container^ components;
+    private: System::Windows::Forms::ContextMenuStrip^ contextMenuStrip1;
+    private: System::ComponentModel::IContainer^ components;
 
-        void LoadCredentials() {
-            credentials = gcnew System::Collections::Generic::Dictionary<String^, String^>();
+           void LoadCredentials() {
+               credentials = gcnew System::Collections::Generic::Dictionary<String^, String^>();
 
-            // Open the username and password files
-            std::ifstream emailFile("C:\\Users\\Keith Naval\\source\\repos\\EECEInventoryTrackerLogin\\x64\\Debug\\username.txt");
-            std::ifstream passwordFile("C:\\Users\\Keith Naval\\source\\repos\\EECEInventoryTrackerLogin\\x64\\Debug\\passwords.txt");
+               // Open the username and password files
+               std::ifstream emailFile("C:\\Users\\Keith Naval\\source\\repos\\EECEInventoryTrackerLogin\\x64\\Debug\\username.txt");
+               std::ifstream passwordFile("C:\\Users\\Keith Naval\\source\\repos\\EECEInventoryTrackerLogin\\x64\\Debug\\passwords.txt");
 
-            if (!emailFile.is_open() || !passwordFile.is_open()) {
-                MessageBox::Show("Error opening files", "File Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
-                return;
-            }
+               if (!emailFile.is_open() || !passwordFile.is_open()) {
+                   MessageBox::Show("Error opening files", "File Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+                   return;
+               }
 
-            std::string email, password;
-            while (getline(emailFile, email) && getline(passwordFile, password)) {
-                credentials->Add(gcnew String(email.c_str()), gcnew String(password.c_str()));
-            }
-        }
+               std::string email, password;
+               while (getline(emailFile, email) && getline(passwordFile, password)) {
+                   credentials->Add(gcnew String(email.c_str()), gcnew String(password.c_str()));
+               }
+           }
 
-        bool VerifyCredentials(String^ email, String^ password) {
-            if (credentials->ContainsKey(email)) {
-                return credentials[email] == password;
-            }
-            return false;
-        }
+           bool VerifyCredentials(String^ email, String^ password) {
+               if (credentials->ContainsKey(email)) {
+                   return credentials[email] == password;
+               }
+               return false;
+           }
 
     private: System::Windows::Forms::Label^ label1;
     private: System::Windows::Forms::Label^ label2;
@@ -71,6 +74,7 @@ namespace EECEInventoryTracker {
 #pragma region Windows Form Designer generated code
            void InitializeComponent(void)
            {
+               this->components = (gcnew System::ComponentModel::Container());
                System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
                this->label1 = (gcnew System::Windows::Forms::Label());
                this->label2 = (gcnew System::Windows::Forms::Label());
@@ -80,16 +84,17 @@ namespace EECEInventoryTracker {
                this->panel2 = (gcnew System::Windows::Forms::Panel());
                this->textBox2 = (gcnew System::Windows::Forms::TextBox());
                this->button1 = (gcnew System::Windows::Forms::Button());
+               this->contextMenuStrip1 = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
                this->SuspendLayout();
                // 
                // label1
                // 
                this->label1->AutoSize = true;
                this->label1->BackColor = System::Drawing::Color::White;
-               this->label1->Font = (gcnew System::Drawing::Font(L"Segoe UI", 28));
+               this->label1->Font = (gcnew System::Drawing::Font(L"Century Gothic", 28));
                this->label1->Location = System::Drawing::Point(61, 96);
                this->label1->Name = L"label1";
-               this->label1->Size = System::Drawing::Size(136, 51);
+               this->label1->Size = System::Drawing::Size(140, 45);
                this->label1->TabIndex = 0;
                this->label1->Text = L"Sign in";
                // 
@@ -97,21 +102,21 @@ namespace EECEInventoryTracker {
                // 
                this->label2->AutoSize = true;
                this->label2->BackColor = System::Drawing::Color::White;
-               this->label2->Font = (gcnew System::Drawing::Font(L"Segoe UI", 10));
+               this->label2->Font = (gcnew System::Drawing::Font(L"Century Gothic", 10));
                this->label2->Location = System::Drawing::Point(67, 163);
                this->label2->Name = L"label2";
-               this->label2->Size = System::Drawing::Size(71, 19);
+               this->label2->Size = System::Drawing::Size(90, 19);
                this->label2->TabIndex = 1;
-               this->label2->Text = L"Username";
+               this->label2->Text = L"Student No.";
                // 
                // label3
                // 
                this->label3->AutoSize = true;
                this->label3->BackColor = System::Drawing::Color::White;
-               this->label3->Font = (gcnew System::Drawing::Font(L"Segoe UI", 10));
+               this->label3->Font = (gcnew System::Drawing::Font(L"Century Gothic", 10));
                this->label3->Location = System::Drawing::Point(67, 236);
                this->label3->Name = L"label3";
-               this->label3->Size = System::Drawing::Size(67, 19);
+               this->label3->Size = System::Drawing::Size(72, 19);
                this->label3->TabIndex = 2;
                this->label3->Text = L"Password";
                this->label3->Click += gcnew System::EventHandler(this, &MyForm::label3_Click);
@@ -168,7 +173,7 @@ namespace EECEInventoryTracker {
                this->button1->FlatAppearance->BorderColor = System::Drawing::Color::White;
                this->button1->FlatAppearance->BorderSize = 0;
                this->button1->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-               this->button1->Font = (gcnew System::Drawing::Font(L"Segoe UI", 12));
+               this->button1->Font = (gcnew System::Drawing::Font(L"Century Gothic", 12));
                this->button1->ForeColor = System::Drawing::Color::White;
                this->button1->Location = System::Drawing::Point(70, 319);
                this->button1->Margin = System::Windows::Forms::Padding(0);
@@ -178,6 +183,11 @@ namespace EECEInventoryTracker {
                this->button1->Text = L"Sign In";
                this->button1->UseVisualStyleBackColor = false;
                this->button1->Click += gcnew System::EventHandler(this, &MyForm::button1_Click);
+               // 
+               // contextMenuStrip1
+               // 
+               this->contextMenuStrip1->Name = L"contextMenuStrip1";
+               this->contextMenuStrip1->Size = System::Drawing::Size(61, 4);
                // 
                // MyForm
                // 
@@ -194,8 +204,7 @@ namespace EECEInventoryTracker {
                this->Controls->Add(this->label2);
                this->Controls->Add(this->label1);
                this->Cursor = System::Windows::Forms::Cursors::Default;
-               this->Font = (gcnew System::Drawing::Font(L"Segoe UI", 15.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                   static_cast<System::Byte>(0)));
+               this->Font = (gcnew System::Drawing::Font(L"Century Gothic", 8.25F));
                this->ForeColor = System::Drawing::SystemColors::ActiveCaptionText;
                this->Name = L"MyForm";
                this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
@@ -211,16 +220,24 @@ namespace EECEInventoryTracker {
     private: System::Void label3_Click(System::Object^ sender, System::EventArgs^ e) {
     }
     private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-        String^ email = textBox1->Text;
+        System::String^ email = textBox1->Text;
         String^ password = textBox2->Text;
 
         if (VerifyCredentials(email, password)) {
-            MessageBox::Show("Access Granted", "EECE Inventory Tracker", MessageBoxButtons::OK, MessageBoxIcon::Information);
-            Form::Close();
+            InventoryManagerUI^ inventoryManagerUI = gcnew InventoryManagerUI(this, textBox1->Text);
+            textBox1->Text = "";
+            textBox2->Text = "";
+            Hide();
+            inventoryManagerUI->FormClosed += gcnew FormClosedEventHandler(this, &MyForm::OnInventoryManagerUIClosed); // Stops it from crashing after 2 signouts
+            inventoryManagerUI->Show();
         }
         else {
             MessageBox::Show("Username or password is incorrect.", "EECE Inventory Tracker", MessageBoxButtons::OK, MessageBoxIcon::Error);
         }
+    }
+
+    private: void OnInventoryManagerUIClosed(Object^ sender, FormClosedEventArgs^ e) {
+        this->Show();
     }
 
     private: bool dragging;
@@ -234,8 +251,7 @@ namespace EECEInventoryTracker {
 
     private: System::Void MyForm_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
         if (dragging) {
-            Point currentScreenPosition;
-            currentScreenPosition = PointToScreen(Point(e->X, e->Y));
+            Point currentScreenPosition = PointToScreen(Point(e->X, e->Y));
             Location = Point(currentScreenPosition.X - offset.X, currentScreenPosition.Y - offset.Y);
         }
     }
@@ -255,11 +271,13 @@ namespace EECEInventoryTracker {
             button1->PerformClick();
         }
     }
+
     private: System::Void textBox1_MouseHover(System::Object^ sender, System::EventArgs^ e) {
         this->textBox1->Cursor = Cursors::IBeam;
     }
-private: System::Void textBox2_MouseHover(System::Object^ sender, System::EventArgs^ e) {
+
+    private: System::Void textBox2_MouseHover(System::Object^ sender, System::EventArgs^ e) {
         this->textBox2->Cursor = Cursors::IBeam;
-}
-};
+    }
+    };
 }

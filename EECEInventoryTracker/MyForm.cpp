@@ -2,12 +2,12 @@
 
 using namespace System;
 using namespace System::Windows::Forms;
+using namespace EECEInventoryTracker;
+using namespace std;
+[STAThread]
 
-[STAThreadAttribute]
+int main() {
 
-void main(array<String^>^ args) {
-	Application::EnableVisualStyles();
-	Application::SetCompatibleTextRenderingDefault(false);
-	EECEInventoryTracker::MyForm form;
-	Application::Run(% form);
+	Application::Run(gcnew MyForm());
+	return 0;
 }
