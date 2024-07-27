@@ -20,7 +20,7 @@ namespace EECEInventoryTracker {
         MyForm(void)
         {
             InitializeComponent();
-            LoadCredentials();
+            studentData = new Student("C:\\Users\\Keith Naval\\Downloads\\students.csv"); // Update with your actual path
         }
 
     protected:
@@ -30,37 +30,13 @@ namespace EECEInventoryTracker {
             {
                 delete components;
             }
+            delete studentData;
         }
 
     private:
-        System::Collections::Generic::Dictionary<String^, String^>^ credentials;
-    private: System::Windows::Forms::ContextMenuStrip^ contextMenuStrip1;
-    private: System::ComponentModel::IContainer^ components;
-
-           void LoadCredentials() {
-               credentials = gcnew System::Collections::Generic::Dictionary<String^, String^>();
-
-               // Open the username and password files
-               std::ifstream emailFile("C:\\Users\\Keith Naval\\source\\repos\\EECEInventoryTrackerLogin\\x64\\Debug\\username.txt");
-               std::ifstream passwordFile("C:\\Users\\Keith Naval\\source\\repos\\EECEInventoryTrackerLogin\\x64\\Debug\\passwords.txt");
-
-               if (!emailFile.is_open() || !passwordFile.is_open()) {
-                   MessageBox::Show("Error opening files", "File Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
-                   return;
-               }
-
-               std::string email, password;
-               while (getline(emailFile, email) && getline(passwordFile, password)) {
-                   credentials->Add(gcnew String(email.c_str()), gcnew String(password.c_str()));
-               }
-           }
-
-           bool VerifyCredentials(String^ email, String^ password) {
-               if (credentials->ContainsKey(email)) {
-                   return credentials[email] == password;
-               }
-               return false;
-           }
+        Student* studentData;
+        System::Windows::Forms::ContextMenuStrip^ contextMenuStrip1;
+        System::ComponentModel::IContainer^ components;
 
     private: System::Windows::Forms::Label^ label1;
     private: System::Windows::Forms::Label^ label2;
@@ -209,6 +185,7 @@ namespace EECEInventoryTracker {
                this->Name = L"MyForm";
                this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
                this->Text = L"Sign in to EECE Inventory Tracker";
+               this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
                this->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::MyForm_MouseDown);
                this->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::MyForm_MouseMove);
                this->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::MyForm_MouseUp);
@@ -220,24 +197,19 @@ namespace EECEInventoryTracker {
     private: System::Void label3_Click(System::Object^ sender, System::EventArgs^ e) {
     }
     private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-        System::String^ email = textBox1->Text;
-        String^ password = textBox2->Text;
+        std::string email = msclr::interop::marshal_as<std::string>(textBox1->Text);
+        std::string password = msclr::interop::marshal_as<std::string>(textBox2->Text);
 
-        if (VerifyCredentials(email, password)) {
-            InventoryManagerUI^ inventoryManagerUI = gcnew InventoryManagerUI(this, textBox1->Text);
+        if (studentData->verifyCredentials(email, password)) {
+            InventoryManagerUI^ obj2 = gcnew InventoryManagerUI(this, textBox1->Text);
             textBox1->Text = "";
             textBox2->Text = "";
-            Hide();
-            inventoryManagerUI->FormClosed += gcnew FormClosedEventHandler(this, &MyForm::OnInventoryManagerUIClosed); // Stops it from crashing after 2 signouts
-            inventoryManagerUI->Show();
+            this->Hide();
+            obj2->Show();
         }
         else {
             MessageBox::Show("Username or password is incorrect.", "EECE Inventory Tracker", MessageBoxButtons::OK, MessageBoxIcon::Error);
         }
-    }
-
-    private: void OnInventoryManagerUIClosed(Object^ sender, FormClosedEventArgs^ e) {
-        this->Show();
     }
 
     private: bool dragging;
@@ -251,7 +223,8 @@ namespace EECEInventoryTracker {
 
     private: System::Void MyForm_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
         if (dragging) {
-            Point currentScreenPosition = PointToScreen(Point(e->X, e->Y));
+            Point currentScreenPosition;
+            currentScreenPosition = PointToScreen(Point(e->X, e->Y));
             Location = Point(currentScreenPosition.X - offset.X, currentScreenPosition.Y - offset.Y);
         }
     }
@@ -271,13 +244,13 @@ namespace EECEInventoryTracker {
             button1->PerformClick();
         }
     }
-
     private: System::Void textBox1_MouseHover(System::Object^ sender, System::EventArgs^ e) {
         this->textBox1->Cursor = Cursors::IBeam;
     }
-
     private: System::Void textBox2_MouseHover(System::Object^ sender, System::EventArgs^ e) {
         this->textBox2->Cursor = Cursors::IBeam;
+    }
+    private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
     }
     };
 }

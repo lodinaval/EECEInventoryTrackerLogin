@@ -5,12 +5,11 @@
 
 namespace EECEInventoryTracker {
 
-
     static System::String^ converterToString(const std::string& temp) {
         return gcnew System::String(temp.c_str()); // Converts std::string to System::String^
     }
 
-   static std::string convertToStdString(System::String^ sysString) {
+    static std::string convertToStdString(System::String^ sysString) {
         return msclr::interop::marshal_as<std::string>(sysString);
     }
 
@@ -24,24 +23,31 @@ namespace EECEInventoryTracker {
     public ref class StudentForm : public System::Windows::Forms::Form
     {
     public:
-        Form ^studentForm;
+        Form^ studentForm;
     private: System::Windows::Forms::Button^ Back;
     private: System::Windows::Forms::PictureBox^ pictureBox1;
+    private: System::Windows::Forms::Label^ studentProgramLabel;
+
+    private: System::Windows::Forms::Label^ label8;
+    private: System::Windows::Forms::Label^ studentEmailL;
+
+
+    private: System::Windows::Forms::Label^ label10;
     public:
-        Form ^obj4;
+        Form^ obj4;
         StudentForm(void)
         {
             InitializeComponent();
         }
 
-        StudentForm(Form ^obj1,String^ studentNo)
+        StudentForm(Form^ obj1, String^ studentNo)
         {
             InitializeComponent();
             obj4 = obj1;
             studentNumberLabel->Text = studentNo;
         }
 
-        StudentForm(Form ^obj1) {
+        StudentForm(Form^ obj1) {
             obj4 = obj1;
             InitializeComponent();
         }
@@ -92,6 +98,10 @@ namespace EECEInventoryTracker {
             this->label6 = (gcnew System::Windows::Forms::Label());
             this->Back = (gcnew System::Windows::Forms::Button());
             this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
+            this->studentProgramLabel = (gcnew System::Windows::Forms::Label());
+            this->label8 = (gcnew System::Windows::Forms::Label());
+            this->studentEmailL = (gcnew System::Windows::Forms::Label());
+            this->label10 = (gcnew System::Windows::Forms::Label());
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
             this->SuspendLayout();
             // 
@@ -132,7 +142,7 @@ namespace EECEInventoryTracker {
             // 
             this->studentNameLabel->AutoSize = true;
             this->studentNameLabel->Font = (gcnew System::Drawing::Font(L"Century Gothic", 20));
-            this->studentNameLabel->Location = System::Drawing::Point(383, 72);
+            this->studentNameLabel->Location = System::Drawing::Point(386, 72);
             this->studentNameLabel->Name = L"studentNameLabel";
             this->studentNameLabel->Size = System::Drawing::Size(30, 33);
             this->studentNameLabel->TabIndex = 5;
@@ -164,72 +174,111 @@ namespace EECEInventoryTracker {
             // 
             this->label3->AutoSize = true;
             this->label3->Font = (gcnew System::Drawing::Font(L"Century Gothic", 20));
-            this->label3->Location = System::Drawing::Point(386, 389);
+            this->label3->Location = System::Drawing::Point(0, 0);
             this->label3->Name = L"label3";
-            this->label3->Size = System::Drawing::Size(30, 33);
-            this->label3->TabIndex = 11;
-            this->label3->Text = L"$";
+            this->label3->Size = System::Drawing::Size(0, 33);
+            this->label3->TabIndex = 4;
             // 
             // label4
             // 
             this->label4->AutoSize = true;
             this->label4->BackColor = System::Drawing::SystemColors::Control;
             this->label4->Font = (gcnew System::Drawing::Font(L"Century Gothic", 20.25F, System::Drawing::FontStyle::Bold));
-            this->label4->Location = System::Drawing::Point(382, 337);
+            this->label4->Location = System::Drawing::Point(0, 0);
             this->label4->Name = L"label4";
-            this->label4->Size = System::Drawing::Size(133, 32);
-            this->label4->TabIndex = 10;
-            this->label4->Text = L"Program:";
-            this->label4->Click += gcnew System::EventHandler(this, &StudentForm::label4_Click);
+            this->label4->Size = System::Drawing::Size(0, 32);
+            this->label4->TabIndex = 5;
             // 
             // studentEmailLabel
             // 
             this->studentEmailLabel->AutoSize = true;
             this->studentEmailLabel->Font = (gcnew System::Drawing::Font(L"Century Gothic", 15));
-            this->studentEmailLabel->Location = System::Drawing::Point(386, 283);
+            this->studentEmailLabel->Location = System::Drawing::Point(0, 0);
             this->studentEmailLabel->Name = L"studentEmailLabel";
-            this->studentEmailLabel->Size = System::Drawing::Size(21, 23);
-            this->studentEmailLabel->TabIndex = 13;
-            this->studentEmailLabel->Text = L"$";
-            this->studentEmailLabel->Click += gcnew System::EventHandler(this, &StudentForm::studentEmailLabel_Click);
+            this->studentEmailLabel->Size = System::Drawing::Size(0, 23);
+            this->studentEmailLabel->TabIndex = 2;
             // 
             // label6
             // 
             this->label6->AutoSize = true;
             this->label6->BackColor = System::Drawing::SystemColors::Control;
             this->label6->Font = (gcnew System::Drawing::Font(L"Century Gothic", 20.25F, System::Drawing::FontStyle::Bold));
-            this->label6->Location = System::Drawing::Point(382, 231);
+            this->label6->Location = System::Drawing::Point(0, 0);
             this->label6->Name = L"label6";
-            this->label6->Size = System::Drawing::Size(91, 32);
-            this->label6->TabIndex = 12;
-            this->label6->Text = L"Email:";
+            this->label6->Size = System::Drawing::Size(0, 32);
+            this->label6->TabIndex = 3;
             // 
             // Back
             // 
             this->Back->Font = (gcnew System::Drawing::Font(L"Century Gothic", 25));
-            this->Back->Location = System::Drawing::Point(21, 425);
+            this->Back->Location = System::Drawing::Point(12, 439);
             this->Back->Name = L"Back";
-            this->Back->Size = System::Drawing::Size(149, 126);
-            this->Back->TabIndex = 14;
+            this->Back->Size = System::Drawing::Size(165, 112);
+            this->Back->TabIndex = 1;
             this->Back->Text = L"BACK";
-            this->Back->UseVisualStyleBackColor = true;
-            this->Back->Click += gcnew System::EventHandler(this, &StudentForm::Back_Click);
+            this->Back->Click += gcnew System::EventHandler(this, &StudentForm::Back_Click_1);
             // 
             // pictureBox1
             // 
             this->pictureBox1->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox1.Image")));
-            this->pictureBox1->Location = System::Drawing::Point(21, 24);
+            this->pictureBox1->Location = System::Drawing::Point(12, 29);
             this->pictureBox1->Name = L"pictureBox1";
-            this->pictureBox1->Size = System::Drawing::Size(307, 375);
+            this->pictureBox1->Size = System::Drawing::Size(340, 352);
             this->pictureBox1->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
-            this->pictureBox1->TabIndex = 15;
+            this->pictureBox1->TabIndex = 0;
             this->pictureBox1->TabStop = false;
+            // 
+            // studentProgramLabel
+            // 
+            this->studentProgramLabel->AutoSize = true;
+            this->studentProgramLabel->Font = (gcnew System::Drawing::Font(L"Century Gothic", 20));
+            this->studentProgramLabel->Location = System::Drawing::Point(386, 287);
+            this->studentProgramLabel->Name = L"studentProgramLabel";
+            this->studentProgramLabel->Size = System::Drawing::Size(30, 33);
+            this->studentProgramLabel->TabIndex = 11;
+            this->studentProgramLabel->Text = L"$";
+            // 
+            // label8
+            // 
+            this->label8->AutoSize = true;
+            this->label8->BackColor = System::Drawing::SystemColors::Control;
+            this->label8->Font = (gcnew System::Drawing::Font(L"Century Gothic", 20.25F, System::Drawing::FontStyle::Bold));
+            this->label8->Location = System::Drawing::Point(382, 235);
+            this->label8->Name = L"label8";
+            this->label8->Size = System::Drawing::Size(133, 32);
+            this->label8->TabIndex = 10;
+            this->label8->Text = L"Program:";
+            // 
+            // studentEmailL
+            // 
+            this->studentEmailL->AutoSize = true;
+            this->studentEmailL->Font = (gcnew System::Drawing::Font(L"Century Gothic", 15));
+            this->studentEmailL->Location = System::Drawing::Point(386, 391);
+            this->studentEmailL->Name = L"studentEmailL";
+            this->studentEmailL->Size = System::Drawing::Size(21, 23);
+            this->studentEmailL->TabIndex = 13;
+            this->studentEmailL->Text = L"$";
+            // 
+            // label10
+            // 
+            this->label10->AutoSize = true;
+            this->label10->BackColor = System::Drawing::SystemColors::Control;
+            this->label10->Font = (gcnew System::Drawing::Font(L"Century Gothic", 20.25F, System::Drawing::FontStyle::Bold));
+            this->label10->Location = System::Drawing::Point(382, 339);
+            this->label10->Name = L"label10";
+            this->label10->Size = System::Drawing::Size(83, 32);
+            this->label10->TabIndex = 12;
+            this->label10->Text = L"Email";
             // 
             // StudentForm
             // 
             this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
             this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
             this->ClientSize = System::Drawing::Size(784, 563);
+            this->Controls->Add(this->studentEmailL);
+            this->Controls->Add(this->label10);
+            this->Controls->Add(this->studentProgramLabel);
+            this->Controls->Add(this->label8);
             this->Controls->Add(this->pictureBox1);
             this->Controls->Add(this->Back);
             this->Controls->Add(this->studentEmailLabel);
@@ -242,10 +291,12 @@ namespace EECEInventoryTracker {
             this->Controls->Add(this->label1);
             this->Controls->Add(this->studentNumberLabel);
             this->Controls->Add(this->label2);
+            this->Location = System::Drawing::Point(21, 24);
             this->Name = L"StudentForm";
             this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
             this->Text = L"EECE Inventory Tracker | My Profile";
             this->Load += gcnew System::EventHandler(this, &StudentForm::StudentForm_Load);
+            this->Click += gcnew System::EventHandler(this, &StudentForm::Back_Click);
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
             this->ResumeLayout(false);
             this->PerformLayout();
@@ -258,28 +309,30 @@ namespace EECEInventoryTracker {
 
         std::string getStudentNumber = msclr::interop::marshal_as<std::string>(studentNumberLabel->Text);
 
-        Student MyProfile; //Create Temp Object to Call Classes
+        Student MyProfile("C:\\Users\\Keith Naval\\Downloads\\students.csv"); // Update with your actual path
 
         std::string studentName = MyProfile.getName(getStudentNumber);
         studentNameLabel->Text = converterToString(studentName);
 
         std::string studentProgram = MyProfile.getProgram(getStudentNumber);
-        label3->Text = converterToString(studentProgram); // Assuming label3 is for program
+        studentProgramLabel->Text = converterToString(studentProgram);
 
         std::string studentContactInfo = MyProfile.getContactInfo(getStudentNumber);
         studentContactInfoLabel->Text = converterToString(studentContactInfo);
 
         std::string studentEmail = MyProfile.getEmail(getStudentNumber);
-        studentEmailLabel->Text = converterToString(studentEmail);
+        studentEmailL->Text = converterToString(studentEmail);
     }
-private: System::Void label4_Click(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void studentNameLabel_Click(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void studentEmailLabel_Click(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void Back_Click(System::Object^ sender, System::EventArgs^ e) {
-    studentForm->Hide();
-}
+    private: System::Void label4_Click(System::Object^ sender, System::EventArgs^ e) {
+    }
+    private: System::Void studentNameLabel_Click(System::Object^ sender, System::EventArgs^ e) {
+    }
+    private: System::Void studentEmailLabel_Click(System::Object^ sender, System::EventArgs^ e) {
+    }
+    private: System::Void Back_Click(System::Object^ sender, System::EventArgs^ e) {
+    }
+    private: System::Void Back_Click_1(System::Object^ sender, System::EventArgs^ e) {
+        this->Hide();
+    }
 };
 }
