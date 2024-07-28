@@ -295,6 +295,7 @@ namespace EECEInventoryTracker {
             this->Name = L"StudentForm";
             this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
             this->Text = L"EECE Inventory Tracker | My Profile";
+            this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &StudentForm::StudentForm_FormClosed);
             this->Load += gcnew System::EventHandler(this, &StudentForm::StudentForm_Load);
             this->Click += gcnew System::EventHandler(this, &StudentForm::Back_Click);
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
@@ -334,5 +335,7 @@ namespace EECEInventoryTracker {
     private: System::Void Back_Click_1(System::Object^ sender, System::EventArgs^ e) {
         this->Hide();
     }
+private: System::Void StudentForm_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
+}
 };
 }

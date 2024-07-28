@@ -185,6 +185,7 @@ namespace EECEInventoryTracker {
                this->Name = L"MyForm";
                this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
                this->Text = L"Sign in to EECE Inventory Tracker";
+               this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &MyForm::MyForm_FormClosed);
                this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
                this->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::MyForm_MouseDown);
                this->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::MyForm_MouseMove);
@@ -251,6 +252,9 @@ namespace EECEInventoryTracker {
         this->textBox2->Cursor = Cursors::IBeam;
     }
     private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
+
     }
-    };
+    private: System::Void MyForm_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
+    }
+};
 }
