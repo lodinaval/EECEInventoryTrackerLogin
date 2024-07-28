@@ -17,7 +17,7 @@ void Equipment::loadData(const std::string& filePath) {
         std::cerr << "Error opening file: " << filePath << std::endl;
         return;
     }
-    std::string id, name, type, status, specs, line;
+    std::string id, name, type, status, specs, quantity, line;
     vector<string> maintenanceHistory;
 
     std::getline(file, line); // Skip header row
@@ -29,17 +29,19 @@ void Equipment::loadData(const std::string& filePath) {
         std::getline(ss, type, ',');
         std::getline(ss, status, ',');
         std::getline(ss, specs, ',');
+        std::getline(ss, quantity, ',');
 
-        equipmentData[id] = Equipment(id, name, type, status, specs);
+        equipmentData[id] = Equipment(id, name, type, status, specs, quantity);
     }
 }
 
-Equipment::Equipment(const string& id, const string& name, const string& type, const string& status, const string& specs) {
+Equipment::Equipment(const string& id, const string& name, const string& type, const string& status, const string& specs, const string& quantity) {
     equipmentId = id;
     equipmentName = name;
     equipmentType = type;
     equipmentStatus = status;
     equipmentSpecs = specs;
+    equipmentQuantity = quantity;
 }
 
 string Equipment::getId() const {
@@ -60,6 +62,10 @@ string Equipment::getStatus() const {
 
 string Equipment::getSpecs() const {
     return equipmentSpecs;
+}
+
+string Equipment::getQuantity() const {
+    return equipmentQuantity;
 }
 
 vector<string> Equipment::getMaintenanceHistory() const {
@@ -84,6 +90,10 @@ void Equipment::updateStatus(const string& status) {
 
 void Equipment::setSpecs(const string& specs) {
     equipmentSpecs = specs;
+}
+
+void Equipment::setQuantity(const string& quantity) {
+    equipmentQuantity = quantity;
 }
 
 void Equipment::addMaintenanceRecord(const string& record) {
@@ -116,6 +126,7 @@ void Equipment::getDetails() const {
     cout << "Type: " << equipmentType << endl;
     cout << "Status: " << equipmentStatus << endl;
     cout << "Specs: " << equipmentSpecs << endl;
+    cout << "Quantity: " << equipmentQuantity << endl;
     cout << "Maintenance History: ";
     for (const auto& record : maintenanceHistory) {
         cout << record << " ";
@@ -128,71 +139,16 @@ void Equipment::generateReport() const {
     getDetails();
 }
 
-vector<Equipment> Equipment::initializeEquipmentList() {
-    return {
-        Equipment("E001", "Microscope", "Optical", "available", "10x-100x magnification"),
-        Equipment("E002", "Oscilloscope", "Electrical", "available", "100MHz bandwidth"),
-        Equipment("E003", "Soldering Station", "Tool", "available", "Adjustable temperature"),
-        Equipment("E004", "Function Generator", "Electrical", "available", "1Hz-1MHz frequency range"),
-        Equipment("E005", "Multimeter", "Electrical", "available", "Voltage, current, resistance measurements"),
-        Equipment("E006", "Spectrometer", "Optical", "available", "UV-Visible range"),
-        Equipment("E007", "Power Supply", "Electrical", "available", "0-30V adjustable output"),
-        Equipment("E008", "Breadboard", "Tool", "available", "For prototyping circuits"),
-        Equipment("E009", "Laser", "Optical", "available", "Various wavelengths"),
-        Equipment("E010", "Ammeter", "Electrical", "available", "Current measurement"),
-        Equipment("E011", "Voltmeter", "Electrical", "available", "Voltage measurement"),
-        Equipment("E012", "Capacitance Meter", "Electrical", "available", "Capacitance measurement"),
-        Equipment("E013", "Inductance Meter", "Electrical", "available", "Inductance measurement"),
-        Equipment("E014", "DC Motor", "Mechanical", "available", "Variable speed"),
-        Equipment("E015", "Thermocouple", "Thermal", "available", "Temperature measurement"),
-        Equipment("E016", "pH Meter", "Chemical", "available", "pH measurement"),
-        Equipment("E017", "Micrometer", "Mechanical", "available", "Precision measurement"),
-        Equipment("E018", "Waveform Generator", "Electrical", "available", "Waveform generation"),
-        Equipment("E019", "Signal Analyzer", "Electrical", "available", "Signal analysis"),
-        Equipment("E020", "Digital Thermometer", "Thermal", "available", "Temperature measurement"),
-    };
-}
-
-void Equipment::addEquipment(const string& id, const string& name, const string& type, const string& status, const string& specs, const string& filePath) {
+void Equipment::addEquipment(const string& id, const string& name, const string& type, const string& status, const string& specs, const string& quantity, const string& filePath) {
     std::ofstream file(filePath, std::ios::app);
     if (!file.is_open()) {
         std::cerr << "Error opening file" << filePath << std::endl;
         return;
     }
-    file << id << "," << name << "," << type << "," << status << "," << specs << std::endl;
+    file << id << "," << name << "," << type << "," << status << "," << specs << "," << quantity << std::endl;
     file.close();
 
-    // Add to internal data structure
-    equipmentData[id] = Equipment(id, name, type, status, specs);
-}
-
-void Equipment::displayAvailableEquipment(const vector<Equipment>& equipmentList) {
-    cout << "Available Equipment:" << endl;
-    for (size_t i = 0; i < equipmentList.size(); ++i) {
-        cout << i + 1 << ". " << equipmentList[i].getName() << " - " << equipmentList[i].getStatus() << endl;
-    }
-}
-
-vector<string> Equipment::selectEquipment(vector<Equipment>& equipmentList, int count) {
-    vector<string> selectedEquipment;
-    int equipmentChoice;
-
-    for (int i = 0; i < count; ++i) {
-        cout << "Select equipment " << i + 1 << " (by number): ";
-        cin >> equipmentChoice;
-        cin.ignore(); // Ignore newline
-
-        if (equipmentChoice > 0 && equipmentChoice <= equipmentList.size()) {
-            selectedEquipment.push_back(equipmentList[equipmentChoice - 1].getName());
-            equipmentList[equipmentChoice - 1].checkOut(); // Mark equipment as in use
-        }
-        else {
-            cout << "Invalid choice, try again." << endl;
-            --i; // Try again
-        }
-    }
-
-    return selectedEquipment;
+    equipmentData[id] = Equipment(id, name, type, status, specs, quantity);
 }
 
 const std::unordered_map<std::string, Equipment>& Equipment::getEquipmentData() const {

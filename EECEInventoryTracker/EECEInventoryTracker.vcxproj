@@ -130,6 +130,7 @@
     <ClCompile Include="Equipment.cpp" />
     <ClCompile Include="InventoryManagerUI.cpp" />
     <ClCompile Include="MyForm.cpp" />
+    <ClCompile Include="StockForm.cpp" />
     <ClCompile Include="Student.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -141,6 +142,10 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="MyForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="Borrow.h" />
+    <ClInclude Include="BorrowForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="Student.h" />
@@ -157,6 +162,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MyForm.resx">
       <DependentUpon>MyForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BorrowForm.resx">
+      <DependentUpon>BorrowForm.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StudentForm.resx">
       <DependentUpon>StudentForm.h</DependentUpon>

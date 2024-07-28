@@ -11,6 +11,7 @@
 #include "Student.h"
 #include "StudentForm.h"
 #include <msclr/marshal_cppstd.h>
+#include "BorrowForm.h"
 
 namespace EECEInventoryTracker {
     using namespace System;
@@ -56,7 +57,10 @@ namespace EECEInventoryTracker {
         System::ComponentModel::IContainer^ components;
 
         String^ studentNumber;
-        Form^ obj;
+    private: System::Windows::Forms::Button^ button3;
+
+
+           Form^ obj;
 
 #pragma region Windows Form Designer generated code
         void InitializeComponent(void) {
@@ -64,6 +68,7 @@ namespace EECEInventoryTracker {
             this->MyProfile = (gcnew System::Windows::Forms::Button());
             this->imageList1 = (gcnew System::Windows::Forms::ImageList(this->components));
             this->panel1 = (gcnew System::Windows::Forms::Panel());
+            this->button3 = (gcnew System::Windows::Forms::Button());
             this->button2 = (gcnew System::Windows::Forms::Button());
             this->nameTopLeft = (gcnew System::Windows::Forms::Label());
             this->button1 = (gcnew System::Windows::Forms::Button());
@@ -79,10 +84,10 @@ namespace EECEInventoryTracker {
             this->MyProfile->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
             this->MyProfile->Font = (gcnew System::Drawing::Font(L"Century Gothic", 16));
             this->MyProfile->ForeColor = System::Drawing::Color::White;
-            this->MyProfile->Location = System::Drawing::Point(0, 443);
+            this->MyProfile->Location = System::Drawing::Point(0, 435);
             this->MyProfile->Margin = System::Windows::Forms::Padding(0);
             this->MyProfile->Name = L"MyProfile";
-            this->MyProfile->Size = System::Drawing::Size(194, 58);
+            this->MyProfile->Size = System::Drawing::Size(194, 62);
             this->MyProfile->TabIndex = 9;
             this->MyProfile->Text = L"My Profile";
             this->MyProfile->UseVisualStyleBackColor = false;
@@ -98,6 +103,7 @@ namespace EECEInventoryTracker {
             // 
             this->panel1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(41)), static_cast<System::Int32>(static_cast<System::Byte>(39)),
                 static_cast<System::Int32>(static_cast<System::Byte>(40)));
+            this->panel1->Controls->Add(this->button3);
             this->panel1->Controls->Add(this->button2);
             this->panel1->Controls->Add(this->nameTopLeft);
             this->panel1->Controls->Add(this->button1);
@@ -106,6 +112,24 @@ namespace EECEInventoryTracker {
             this->panel1->Name = L"panel1";
             this->panel1->Size = System::Drawing::Size(192, 563);
             this->panel1->TabIndex = 10;
+            // 
+            // button3
+            // 
+            this->button3->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(41)), static_cast<System::Int32>(static_cast<System::Byte>(39)),
+                static_cast<System::Int32>(static_cast<System::Byte>(40)));
+            this->button3->FlatAppearance->BorderColor = System::Drawing::Color::White;
+            this->button3->FlatAppearance->BorderSize = 0;
+            this->button3->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button3->Font = (gcnew System::Drawing::Font(L"Century Gothic", 16));
+            this->button3->ForeColor = System::Drawing::Color::White;
+            this->button3->Location = System::Drawing::Point(-2, 190);
+            this->button3->Margin = System::Windows::Forms::Padding(0);
+            this->button3->Name = L"button3";
+            this->button3->Size = System::Drawing::Size(194, 62);
+            this->button3->TabIndex = 12;
+            this->button3->Text = L"Borrow";
+            this->button3->UseVisualStyleBackColor = false;
+            this->button3->Click += gcnew System::EventHandler(this, &InventoryManagerUI::button3_Click);
             // 
             // button2
             // 
@@ -150,10 +174,10 @@ namespace EECEInventoryTracker {
             this->button1->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
             this->button1->Font = (gcnew System::Drawing::Font(L"Century Gothic", 16));
             this->button1->ForeColor = System::Drawing::Color::White;
-            this->button1->Location = System::Drawing::Point(0, 113);
+            this->button1->Location = System::Drawing::Point(-2, 119);
             this->button1->Margin = System::Windows::Forms::Padding(0);
             this->button1->Name = L"button1";
-            this->button1->Size = System::Drawing::Size(194, 43);
+            this->button1->Size = System::Drawing::Size(194, 62);
             this->button1->TabIndex = 10;
             this->button1->Text = L"Equipment";
             this->button1->UseVisualStyleBackColor = false;
@@ -172,6 +196,7 @@ namespace EECEInventoryTracker {
             this->panel1->ResumeLayout(false);
             this->panel1->PerformLayout();
             this->ResumeLayout(false);
+
         }
 #pragma endregion
     private: System::Void MyProfile_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -193,5 +218,10 @@ namespace EECEInventoryTracker {
         equipmentForm->ShowDialog();
         this->Show();
     }
-    };
+    private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
+        BorrowForm^ borrowForm = gcnew BorrowForm(this, nameTopLeft->Text);
+        this->Hide();
+        borrowForm->ShowDialog();
+    }
+};
 }

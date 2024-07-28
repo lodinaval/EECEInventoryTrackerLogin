@@ -1,6 +1,7 @@
   EECEInventoryTracker.EquipmentForm.resources - Embedded, ContainedInManifestFile, 
   EECEInventoryTracker.InventoryManagerUI.resources - Embedded, ContainedInManifestFile, 
   EECEInventoryTracker.MyForm.resources - Embedded, ContainedInManifestFile, 
+  EECEInventoryTracker.BorrowForm.resources - Embedded, ContainedInManifestFile, 
   EECEInventoryTracker.StudentForm.resources - Embedded, ContainedInManifestFile, 
 ImageRuntimeVersion: v4.0.30319
 Assembly EECEInventoryTracker, Version=0.0.*, Culture=Invariant Language (Invariant Country): 
@@ -30,6 +31,13 @@ Class EECEInventoryTracker.StudentForm: AutoLayout, AnsiClass, Class, Public, Be
 Class EECEInventoryTracker.EquipmentForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+Class EECEInventoryTracker.BorrowForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.Windows.Forms.Form
+    Void .ctor(System.Windows.Forms.Form, System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    System.Windows.Forms.Form InventoryManager : Public
+    System.String StudentNumber : Public
 Class EECEInventoryTracker.InventoryManagerUI: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(System.Windows.Forms.Form): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
