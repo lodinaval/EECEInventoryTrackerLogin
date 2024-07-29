@@ -452,6 +452,10 @@ namespace EECEInventoryTracker {
         }
     }
     private: System::Void checkOutButton_Click(System::Object^ sender, System::EventArgs^ e) {
+        if (borrowedItemsTable->Rows->Count == 0) {
+            MessageBox::Show("No items have been added to borrow.", "Finalize Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+            return;
+        }
         std::string transactionsFilePath = "C:\\Users\\Keith Naval\\Downloads\\borrowTransactions.csv";
         std::string equipmentFilePath = "C:\\Users\\Keith Naval\\Downloads\\equipments.csv";
         this->Hide(); //Hides current form
