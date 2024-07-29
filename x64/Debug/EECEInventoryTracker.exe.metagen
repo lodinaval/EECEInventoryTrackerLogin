@@ -30,6 +30,7 @@ Class EECEInventoryTracker.StudentForm: AutoLayout, AnsiClass, Class, Public, Be
     System.Windows.Forms.Form obj4 : Public
 Class EECEInventoryTracker.EquipmentForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
+    Void .ctor(System.Windows.Forms.Form): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
 Class EECEInventoryTracker.BorrowForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form

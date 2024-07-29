@@ -26,6 +26,7 @@ namespace EECEInventoryTracker {
 
         Form^ InventoryManager;
     private: System::Windows::Forms::Button^ checkOutButton;
+    private: System::Windows::Forms::Button^ backButton;
     public:
         String^ StudentNumber;
 
@@ -81,19 +82,20 @@ namespace EECEInventoryTracker {
            {
                this->components = (gcnew System::ComponentModel::Container());
                this->panel3 = (gcnew System::Windows::Forms::Panel());
+               this->backButton = (gcnew System::Windows::Forms::Button());
                this->studentNumberLabel = (gcnew System::Windows::Forms::Label());
                this->label5 = (gcnew System::Windows::Forms::Label());
-               this->borrowButton = (gcnew System::Windows::Forms::Button());
-               this->labelQuantity = (gcnew System::Windows::Forms::Label());
-               this->borrowQuantity = (gcnew System::Windows::Forms::TextBox());
-               this->label2 = (gcnew System::Windows::Forms::Label());
-               this->borrowID = (gcnew System::Windows::Forms::TextBox());
                this->searchLabel = (gcnew System::Windows::Forms::Label());
                this->searchBorrowTextBox = (gcnew System::Windows::Forms::TextBox());
                this->timeLabel = (gcnew System::Windows::Forms::Label());
                this->label3 = (gcnew System::Windows::Forms::Label());
                this->dateLabel = (gcnew System::Windows::Forms::Label());
                this->searchIDLabel = (gcnew System::Windows::Forms::Label());
+               this->borrowButton = (gcnew System::Windows::Forms::Button());
+               this->labelQuantity = (gcnew System::Windows::Forms::Label());
+               this->borrowQuantity = (gcnew System::Windows::Forms::TextBox());
+               this->label2 = (gcnew System::Windows::Forms::Label());
+               this->borrowID = (gcnew System::Windows::Forms::TextBox());
                this->panel1 = (gcnew System::Windows::Forms::Panel());
                this->dataGridView1 = (gcnew System::Windows::Forms::DataGridView());
                this->label1 = (gcnew System::Windows::Forms::Label());
@@ -108,13 +110,9 @@ namespace EECEInventoryTracker {
                // 
                // panel3
                // 
+               this->panel3->Controls->Add(this->backButton);
                this->panel3->Controls->Add(this->studentNumberLabel);
                this->panel3->Controls->Add(this->label5);
-               this->panel3->Controls->Add(this->borrowButton);
-               this->panel3->Controls->Add(this->labelQuantity);
-               this->panel3->Controls->Add(this->borrowQuantity);
-               this->panel3->Controls->Add(this->label2);
-               this->panel3->Controls->Add(this->borrowID);
                this->panel3->Controls->Add(this->searchLabel);
                this->panel3->Controls->Add(this->searchBorrowTextBox);
                this->panel3->Controls->Add(this->timeLabel);
@@ -127,12 +125,22 @@ namespace EECEInventoryTracker {
                this->panel3->Size = System::Drawing::Size(976, 99);
                this->panel3->TabIndex = 15;
                // 
+               // backButton
+               // 
+               this->backButton->Location = System::Drawing::Point(27, 25);
+               this->backButton->Name = L"backButton";
+               this->backButton->Size = System::Drawing::Size(85, 64);
+               this->backButton->TabIndex = 23;
+               this->backButton->Text = L"Home";
+               this->backButton->UseVisualStyleBackColor = true;
+               this->backButton->Click += gcnew System::EventHandler(this, &BorrowForm::backButton_Click);
+               // 
                // studentNumberLabel
                // 
                this->studentNumberLabel->AutoSize = true;
                this->studentNumberLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
                    System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-               this->studentNumberLabel->Location = System::Drawing::Point(252, 54);
+               this->studentNumberLabel->Location = System::Drawing::Point(488, 54);
                this->studentNumberLabel->Name = L"studentNumberLabel";
                this->studentNumberLabel->Size = System::Drawing::Size(44, 16);
                this->studentNumberLabel->TabIndex = 22;
@@ -143,60 +151,16 @@ namespace EECEInventoryTracker {
                this->label5->AutoSize = true;
                this->label5->Font = (gcnew System::Drawing::Font(L"Century Gothic", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
                    static_cast<System::Byte>(0)));
-               this->label5->Location = System::Drawing::Point(251, 30);
+               this->label5->Location = System::Drawing::Point(487, 30);
                this->label5->Name = L"label5";
                this->label5->Size = System::Drawing::Size(138, 19);
                this->label5->TabIndex = 21;
                this->label5->Text = L"Student Number:";
                // 
-               // borrowButton
-               // 
-               this->borrowButton->Location = System::Drawing::Point(624, 46);
-               this->borrowButton->Name = L"borrowButton";
-               this->borrowButton->Size = System::Drawing::Size(75, 23);
-               this->borrowButton->TabIndex = 20;
-               this->borrowButton->Text = L"Add";
-               this->borrowButton->UseVisualStyleBackColor = true;
-               this->borrowButton->Click += gcnew System::EventHandler(this, &BorrowForm::borrowButton_Click);
-               // 
-               // labelQuantity
-               // 
-               this->labelQuantity->AutoSize = true;
-               this->labelQuantity->Location = System::Drawing::Point(548, 27);
-               this->labelQuantity->Name = L"labelQuantity";
-               this->labelQuantity->Size = System::Drawing::Size(46, 13);
-               this->labelQuantity->TabIndex = 19;
-               this->labelQuantity->Text = L"Quantity";
-               // 
-               // borrowQuantity
-               // 
-               this->borrowQuantity->Font = (gcnew System::Drawing::Font(L"Century Gothic", 10));
-               this->borrowQuantity->Location = System::Drawing::Point(550, 46);
-               this->borrowQuantity->Name = L"borrowQuantity";
-               this->borrowQuantity->Size = System::Drawing::Size(44, 24);
-               this->borrowQuantity->TabIndex = 18;
-               // 
-               // label2
-               // 
-               this->label2->AutoSize = true;
-               this->label2->Location = System::Drawing::Point(425, 27);
-               this->label2->Name = L"label2";
-               this->label2->Size = System::Drawing::Size(18, 13);
-               this->label2->TabIndex = 17;
-               this->label2->Text = L"ID";
-               // 
-               // borrowID
-               // 
-               this->borrowID->Font = (gcnew System::Drawing::Font(L"Century Gothic", 10));
-               this->borrowID->Location = System::Drawing::Point(425, 46);
-               this->borrowID->Name = L"borrowID";
-               this->borrowID->Size = System::Drawing::Size(91, 24);
-               this->borrowID->TabIndex = 16;
-               // 
                // searchLabel
                // 
                this->searchLabel->AutoSize = true;
-               this->searchLabel->Location = System::Drawing::Point(745, 30);
+               this->searchLabel->Location = System::Drawing::Point(744, 30);
                this->searchLabel->Name = L"searchLabel";
                this->searchLabel->Size = System::Drawing::Size(41, 13);
                this->searchLabel->TabIndex = 15;
@@ -217,7 +181,7 @@ namespace EECEInventoryTracker {
                this->timeLabel->AutoSize = true;
                this->timeLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                    static_cast<System::Byte>(0)));
-               this->timeLabel->Location = System::Drawing::Point(164, 54);
+               this->timeLabel->Location = System::Drawing::Point(365, 54);
                this->timeLabel->Name = L"timeLabel";
                this->timeLabel->Size = System::Drawing::Size(44, 16);
                this->timeLabel->TabIndex = 6;
@@ -228,7 +192,7 @@ namespace EECEInventoryTracker {
                this->label3->AutoSize = true;
                this->label3->Font = (gcnew System::Drawing::Font(L"Century Gothic", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
                    static_cast<System::Byte>(0)));
-               this->label3->Location = System::Drawing::Point(163, 30);
+               this->label3->Location = System::Drawing::Point(364, 30);
                this->label3->Name = L"label3";
                this->label3->Size = System::Drawing::Size(50, 19);
                this->label3->TabIndex = 5;
@@ -239,7 +203,7 @@ namespace EECEInventoryTracker {
                this->dateLabel->AutoSize = true;
                this->dateLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                    static_cast<System::Byte>(0)));
-               this->dateLabel->Location = System::Drawing::Point(15, 54);
+               this->dateLabel->Location = System::Drawing::Point(182, 54);
                this->dateLabel->Name = L"dateLabel";
                this->dateLabel->Size = System::Drawing::Size(44, 16);
                this->dateLabel->TabIndex = 4;
@@ -250,18 +214,66 @@ namespace EECEInventoryTracker {
                this->searchIDLabel->AutoSize = true;
                this->searchIDLabel->Font = (gcnew System::Drawing::Font(L"Century Gothic", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
                    static_cast<System::Byte>(0)));
-               this->searchIDLabel->Location = System::Drawing::Point(14, 30);
+               this->searchIDLabel->Location = System::Drawing::Point(181, 30);
                this->searchIDLabel->Name = L"searchIDLabel";
                this->searchIDLabel->Size = System::Drawing::Size(49, 19);
                this->searchIDLabel->TabIndex = 3;
                this->searchIDLabel->Text = L"Date:";
+               // 
+               // borrowButton
+               // 
+               this->borrowButton->Location = System::Drawing::Point(462, 527);
+               this->borrowButton->Name = L"borrowButton";
+               this->borrowButton->Size = System::Drawing::Size(75, 27);
+               this->borrowButton->TabIndex = 20;
+               this->borrowButton->Text = L"Add";
+               this->borrowButton->UseVisualStyleBackColor = true;
+               this->borrowButton->Click += gcnew System::EventHandler(this, &BorrowForm::borrowButton_Click);
+               // 
+               // labelQuantity
+               // 
+               this->labelQuantity->AutoSize = true;
+               this->labelQuantity->Location = System::Drawing::Point(379, 513);
+               this->labelQuantity->Name = L"labelQuantity";
+               this->labelQuantity->Size = System::Drawing::Size(46, 13);
+               this->labelQuantity->TabIndex = 19;
+               this->labelQuantity->Text = L"Quantity";
+               this->labelQuantity->Click += gcnew System::EventHandler(this, &BorrowForm::labelQuantity_Click);
+               // 
+               // borrowQuantity
+               // 
+               this->borrowQuantity->Font = (gcnew System::Drawing::Font(L"Century Gothic", 10));
+               this->borrowQuantity->Location = System::Drawing::Point(382, 529);
+               this->borrowQuantity->Name = L"borrowQuantity";
+               this->borrowQuantity->Size = System::Drawing::Size(44, 24);
+               this->borrowQuantity->TabIndex = 18;
+               this->borrowQuantity->TextChanged += gcnew System::EventHandler(this, &BorrowForm::borrowQuantity_TextChanged);
+               // 
+               // label2
+               // 
+               this->label2->AutoSize = true;
+               this->label2->Location = System::Drawing::Point(255, 513);
+               this->label2->Name = L"label2";
+               this->label2->Size = System::Drawing::Size(18, 13);
+               this->label2->TabIndex = 17;
+               this->label2->Text = L"ID";
+               this->label2->Click += gcnew System::EventHandler(this, &BorrowForm::label2_Click);
+               // 
+               // borrowID
+               // 
+               this->borrowID->Font = (gcnew System::Drawing::Font(L"Century Gothic", 10));
+               this->borrowID->Location = System::Drawing::Point(257, 529);
+               this->borrowID->Name = L"borrowID";
+               this->borrowID->Size = System::Drawing::Size(91, 24);
+               this->borrowID->TabIndex = 16;
+               this->borrowID->TextChanged += gcnew System::EventHandler(this, &BorrowForm::borrowID_TextChanged);
                // 
                // panel1
                // 
                this->panel1->Controls->Add(this->dataGridView1);
                this->panel1->Location = System::Drawing::Point(0, 105);
                this->panel1->Name = L"panel1";
-               this->panel1->Size = System::Drawing::Size(976, 421);
+               this->panel1->Size = System::Drawing::Size(976, 390);
                this->panel1->TabIndex = 16;
                // 
                // dataGridView1
@@ -276,7 +288,7 @@ namespace EECEInventoryTracker {
                this->dataGridView1->Location = System::Drawing::Point(0, 0);
                this->dataGridView1->Name = L"dataGridView1";
                this->dataGridView1->ReadOnly = true;
-               this->dataGridView1->Size = System::Drawing::Size(976, 421);
+               this->dataGridView1->Size = System::Drawing::Size(976, 390);
                this->dataGridView1->TabIndex = 19;
                this->dataGridView1->CellContentClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &BorrowForm::dataGridView1_CellContentClick);
                // 
@@ -285,11 +297,12 @@ namespace EECEInventoryTracker {
                this->label1->AutoSize = true;
                this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 15.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                    static_cast<System::Byte>(0)));
-               this->label1->Location = System::Drawing::Point(5, 533);
+               this->label1->Location = System::Drawing::Point(13, 527);
                this->label1->Name = L"label1";
                this->label1->Size = System::Drawing::Size(224, 25);
                this->label1->TabIndex = 18;
                this->label1->Text = L"List of Borrowed Items";
+               this->label1->Click += gcnew System::EventHandler(this, &BorrowForm::label1_Click);
                // 
                // timer1
                // 
@@ -302,21 +315,21 @@ namespace EECEInventoryTracker {
                this->borrowedItemsGrid->AllowUserToDeleteRows = false;
                this->borrowedItemsGrid->AutoSizeColumnsMode = System::Windows::Forms::DataGridViewAutoSizeColumnsMode::Fill;
                this->borrowedItemsGrid->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-               this->borrowedItemsGrid->Location = System::Drawing::Point(0, 563);
+               this->borrowedItemsGrid->Location = System::Drawing::Point(0, 572);
                this->borrowedItemsGrid->Name = L"borrowedItemsGrid";
                this->borrowedItemsGrid->ReadOnly = true;
-               this->borrowedItemsGrid->Size = System::Drawing::Size(768, 161);
+               this->borrowedItemsGrid->Size = System::Drawing::Size(976, 152);
                this->borrowedItemsGrid->TabIndex = 19;
                // 
                // checkOutButton
                // 
                this->checkOutButton->Font = (gcnew System::Drawing::Font(L"Century Gothic", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
                    static_cast<System::Byte>(0)));
-               this->checkOutButton->Location = System::Drawing::Point(798, 611);
+               this->checkOutButton->Location = System::Drawing::Point(816, 518);
                this->checkOutButton->Name = L"checkOutButton";
-               this->checkOutButton->Size = System::Drawing::Size(166, 55);
+               this->checkOutButton->Size = System::Drawing::Size(148, 38);
                this->checkOutButton->TabIndex = 20;
-               this->checkOutButton->Text = L"Finalize";
+               this->checkOutButton->Text = L"Check Out";
                this->checkOutButton->UseVisualStyleBackColor = true;
                this->checkOutButton->Click += gcnew System::EventHandler(this, &BorrowForm::checkOutButton_Click);
                // 
@@ -327,9 +340,14 @@ namespace EECEInventoryTracker {
                this->ClientSize = System::Drawing::Size(976, 725);
                this->Controls->Add(this->checkOutButton);
                this->Controls->Add(this->borrowedItemsGrid);
+               this->Controls->Add(this->borrowButton);
+               this->Controls->Add(this->labelQuantity);
                this->Controls->Add(this->label1);
+               this->Controls->Add(this->borrowQuantity);
                this->Controls->Add(this->panel1);
+               this->Controls->Add(this->label2);
                this->Controls->Add(this->panel3);
+               this->Controls->Add(this->borrowID);
                this->Name = L"BorrowForm";
                this->Text = L"EECE Inventory Tracker | Borrow";
                this->Load += gcnew System::EventHandler(this, &BorrowForm::BorrowForm_Load);
@@ -465,7 +483,21 @@ namespace EECEInventoryTracker {
         checkOut.exportBorrowedItemsToCSV(StudentNumber, transactionID, transactionsFilePath, borrowedItemsTable); //Exports BorrowedItems to borrowedTransactions.csv
         checkOut.exportEquipmentDataToCSV(equipmentFilePath, equipmentTable); //Updates equipment.csv with BorrowedItems deducted.
         MessageBox::Show(message, "Finalization Successful", MessageBoxButtons::OK, MessageBoxIcon::Information); //MessageBox
-
+        InventoryManager->Show();
     }
+private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void borrowID_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void borrowQuantity_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void label2_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void labelQuantity_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void backButton_Click(System::Object^ sender, System::EventArgs^ e) {
+    this->Hide();
+    InventoryManager->Show();
+}
 };
 }

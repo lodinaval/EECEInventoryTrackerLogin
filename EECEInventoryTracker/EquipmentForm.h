@@ -21,6 +21,14 @@ namespace EECEInventoryTracker {
             LoadEquipmentData();
         }
 
+        EquipmentForm(Form^ inventoryManagerObj)
+        {
+            InitializeComponent();
+            LoadEquipmentData();
+            InventoryManager = inventoryManagerObj;
+
+        }
+
     protected:
         ~EquipmentForm()
         {
@@ -31,9 +39,11 @@ namespace EECEInventoryTracker {
         }
 
     private: System::Windows::Forms::DataGridView^ equipmentGridView;
+           
     protected:
 
     private:
+        Form^ InventoryManager;
         System::Windows::Forms::Panel^ panel1;
         System::Windows::Forms::Label^ searchStatus;
         System::Windows::Forms::Label^ label2;
@@ -52,6 +62,7 @@ namespace EECEInventoryTracker {
     private: System::Windows::Forms::Panel^ panel3;
     private: System::Windows::Forms::Label^ labelQuantity;
     private: System::Windows::Forms::TextBox^ addQuantity;
+    private: System::Windows::Forms::Button^ backButton;
 
            System::ComponentModel::Container^ components;
 
@@ -159,6 +170,7 @@ namespace EECEInventoryTracker {
                this->panel2 = (gcnew System::Windows::Forms::Panel());
                this->searchLabel = (gcnew System::Windows::Forms::Label());
                this->panel3 = (gcnew System::Windows::Forms::Panel());
+               this->backButton = (gcnew System::Windows::Forms::Button());
                (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->equipmentGridView))->BeginInit();
                this->panel1->SuspendLayout();
                this->panel2->SuspendLayout();
@@ -360,12 +372,23 @@ namespace EECEInventoryTracker {
                // 
                // panel3
                // 
+               this->panel3->Controls->Add(this->backButton);
                this->panel3->Controls->Add(this->searchLabel);
                this->panel3->Controls->Add(this->searchTextBox);
                this->panel3->Location = System::Drawing::Point(0, -2);
                this->panel3->Name = L"panel3";
                this->panel3->Size = System::Drawing::Size(1064, 64);
                this->panel3->TabIndex = 14;
+               // 
+               // backButton
+               // 
+               this->backButton->Location = System::Drawing::Point(27, 12);
+               this->backButton->Name = L"backButton";
+               this->backButton->Size = System::Drawing::Size(65, 40);
+               this->backButton->TabIndex = 14;
+               this->backButton->Text = L"HOME";
+               this->backButton->UseVisualStyleBackColor = true;
+               this->backButton->Click += gcnew System::EventHandler(this, &EquipmentForm::backButton_Click);
                // 
                // EquipmentForm
                // 
@@ -460,5 +483,9 @@ namespace EECEInventoryTracker {
             (safe_cast<DataTable^>(equipmentGridView->DataSource))->DefaultView->RowFilter = filterExpression;
         }
     }
-    };
+    private: System::Void backButton_Click(System::Object^ sender, System::EventArgs^ e) {
+        this->Hide();
+        InventoryManager->Show();
+    }
+};
 }
