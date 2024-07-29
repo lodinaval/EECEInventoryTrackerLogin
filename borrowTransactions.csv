@@ -1,0 +1,5 @@
+Transaction ID,Student Number,DateTime,ID,Name,Type,Status,Specs,Quantity
+2.02E+11,2020130270,7/28/2024 20:36,E005,Multimeter,Electrical,Available,Voltage,4
+2.02E+11,2020130270,7/28/2024 20:36,E001,Pinera,Boi,Available,GOAT,1
+2.02E+11,2023456789,7/28/2024 20:36,E015,Resistor,RL,Available,100 Ohm,1
+2.02407E+11,2020130270,7/28/2024 20:44,E011,Voltmeter,Electrical,Available,Voltage measurement,3

@@ -1,0 +1,13 @@
+ID,Name,Type,Status,Specs,Quantity
+E005,Multimeter,Electrical,Available,Voltage,4
+E006,Spectrometer,Optical,Available,UV-Visible range,1
+E007,Power Supply,Electrical,Available,0-30V adjustable output,5
+E008,Breadboard,Tool,Available,For prototyping circuits,6
+E012,Capacitance Meter,Electrical,Available,Capacitance measurement,4
+E009,Laser,Optical,Available,Various wavelengths,7
+E010,Ammeter,Electrical,Available,Current measurement,12
+E011,Voltmeter,Electrical,Available,Voltage measurement,0
+E013,Inductance Meter,Electrical,Available,Inductance measurement,2
+E014,DC Motor,Mechanical,Available,Variable speed,1
+E015,Resistor,RL,Available,100 Ohm,10
+E001,Pinera,Boi,Available,GOAT,1
