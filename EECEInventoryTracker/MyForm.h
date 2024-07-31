@@ -4,6 +4,7 @@
 #include <msclr/marshal_cppstd.h>
 #include "InventoryManagerUI.h"
 #include "Student.h"
+#include "Faculty.h"
 
 namespace EECEInventoryTracker {
 
@@ -20,7 +21,6 @@ namespace EECEInventoryTracker {
         MyForm(void)
         {
             InitializeComponent();
-            studentData = new Student("C:\\Users\\Keith Naval\\Downloads\\students.csv"); // Update with your actual path
         }
 
     protected:
@@ -198,12 +198,14 @@ namespace EECEInventoryTracker {
     private: System::Void label3_Click(System::Object^ sender, System::EventArgs^ e) {
     }
     private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-        std::string email = msclr::interop::marshal_as<std::string>(textBox1->Text);
+        std::string username = msclr::interop::marshal_as<std::string>(textBox1->Text);
         std::string password = msclr::interop::marshal_as<std::string>(textBox2->Text);
 
-        if (studentData->verifyCredentials(email, password)) {
-            InventoryManagerUI^ obj2 = gcnew InventoryManagerUI(this, textBox1->Text);
-            textBox1->Text = "";
+        Student studentLogin("C:\\Users\\Keith Naval\\Downloads\\students.csv"); //When button is clicked, it creates student object and refers to the students.csv file {REQUIRED}
+        Faculty facultyLogin("C:\\Users\\Keith Naval\\Downloads\\mapuaFaculty.csv");
+        if (studentLogin.verifyCredentials(username,password) || facultyLogin.verifyCredentials(username, password)) {
+            InventoryManagerUI^ obj2 = gcnew InventoryManagerUI(this, textBox1->Text); //Loads InventoryManagerUI Form, it passes the studentNumber to the InventoryManagerUI
+            textBox1->Text = ""; //Empties Fields
             textBox2->Text = "";
             this->Hide();
             obj2->Show();
@@ -252,7 +254,6 @@ namespace EECEInventoryTracker {
         this->textBox2->Cursor = Cursors::IBeam;
     }
     private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
-
     }
     private: System::Void MyForm_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
     }

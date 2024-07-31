@@ -1,167 +1,161 @@
 #pragma once
+
 #ifndef BORROW_H
 #define BORROW_H
 
-#include <iostream>
-#include <fstream>
 #include <string>
-#include <sstream>
 #include <msclr/marshal_cppstd.h>
+#include <fstream>
+#include "Equipment.h"
 
-using namespace std;
-using namespace System; 
-using namespace System::Data; //Used to access datagridview
+using namespace System;
+using namespace System::Data;
+using namespace System::Windows::Forms;
 
-inline bool is_number(const std::string& s) // Just used to check if string is number
-{
-    std::string::const_iterator it = s.begin();
-    while (it != s.end() && std::isdigit(*it)) ++it;
-    return !s.empty() && it == s.end();
-}
-
-class Stock {
+class Borrow {
 public:
-    Stock() {}
-    Stock(const string& id, const string& quantity) {
-        borrowID = id;
-        borrowQuantity = quantity;
-    }
+    static void BorrowEquipment(TextBox^ borrowIDTextBox, TextBox^ borrowQuantityTextBox, DataTable^ equipmentTable, DataTable^ borrowedItemsTable, DataGridView^ dataGridView) {
+        // Convert System::String^ to std::string
+        std::string borrowIDStr = msclr::interop::marshal_as<std::string>(borrowIDTextBox->Text);
+        std::string borrowQuantityStr = msclr::interop::marshal_as<std::string>(borrowQuantityTextBox->Text);
 
-    std::string getID(String^ id) {
-        borrowID = msclr::interop::marshal_as<std::string>(id);
-        return borrowID;
-    }
-
-    std::string getQuantity(String^ quantity) {
-        borrowQuantity = msclr::interop::marshal_as<std::string>(quantity);
-        return borrowQuantity;
-    }
-
-    bool BorrowValid() { // Checks if there is input at least
-        if (borrowID.empty() || borrowQuantity.empty()) {
-            return false;
+        // Validate the input values
+        if (borrowIDStr.empty() || borrowQuantityStr.empty()) {
+            MessageBox::Show("Please input valid values in all the required fields: ID, Quantity", "Input Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+            return;
         }
-        int borrowQuantityInt = stoi(borrowQuantity);
-        if (!is_number(borrowQuantity) || borrowQuantityInt == 0) { // If quantity input is not a number or a zero, return false
-            return false;
+
+        // Convert borrowQuantityStr to an integer
+        int borrowQuantityInt;
+        try {
+            borrowQuantityInt = std::stoi(borrowQuantityStr); //Makes the integer into a string. If its invalid, that means the input wasnt an integer
         }
-        return true;
+        catch (const std::invalid_argument&) {
+            MessageBox::Show("Please input a valid quantity.", "Input Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+            return;
+        }
+
+        // Search for the equipment in equipmentTable using borrowID
+        DataRow^ foundRow = nullptr;
+        for each (DataRow ^ row in equipmentTable->Rows) {
+            if (row["ID"]->ToString() == gcnew String(borrowIDStr.c_str())) {
+                foundRow = row;
+                break;
+            }
+        }
+
+        if (foundRow == nullptr) {
+            MessageBox::Show("ID not found in the equipment list.", "ID Not Found", MessageBoxButtons::OK, MessageBoxIcon::Error);
+            return;
+        }
+
+        // Check if the quantity is sufficient
+        int currentQuantity = Int32::Parse(foundRow["Quantity"]->ToString());
+        if (borrowQuantityInt > currentQuantity) {
+            MessageBox::Show("Not enough stock available.", "Stock Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+            return;
+        }
+
+        // Update the quantity in equipmentTable
+        foundRow["Quantity"] = (currentQuantity - borrowQuantityInt).ToString();
+
+        // Add the equipment details to borrowedItemsGrid
+        DataRow^ newRow = borrowedItemsTable->NewRow();
+        newRow["ID"] = foundRow["ID"];
+        newRow["Name"] = foundRow["Name"];
+        newRow["Type"] = foundRow["Type"];
+        newRow["Status"] = foundRow["Status"];
+        newRow["Specs"] = foundRow["Specs"];
+        newRow["Quantity"] = gcnew String(borrowQuantityStr.c_str());
+        borrowedItemsTable->Rows->Add(newRow);
+
+        // Refresh the dataGridView to reflect the updated equipmentTable
+        dataGridView->DataSource = equipmentTable;
     }
 
-    String^ generateTransactionID() {
-        int counter = 0;
-        String^ currentDate;
+    static void CheckOut(DataTable^ borrowedItemsTable, DataTable^ equipmentTable, Form^ InventoryManager, String^ StudentNumber) {
+        if (borrowedItemsTable->Rows->Count == 0) {
+            MessageBox::Show("No items have been added to borrow.", "Finalize Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+            return;
+        }
+
+        std::string transactionsFilePath = "C:\\Users\\Keith Naval\\Downloads\\borrowTransactions.csv";
+        std::string equipmentFilePath = "C:\\Users\\Keith Naval\\Downloads\\equipments.csv";
+
+        // Generate a Transaction ID using the current date and time
+        String^ transactionID = GenerateTransactionID();
         DateTime now = DateTime::Now;
-        String^ date = now.ToString("yyyyMMdd");
+        String^ dateTimeString = now.ToString("M/d/yyyy HH:mm");
 
-        if (currentDate != date) {
-            currentDate = date;
-            counter = 0; // Reset the counter for a new day
-        }
-        counter++;
-        return date + counter.ToString("D4"); // Date + counter with leading zeros (4 digits)
+        // Export borrowed items to borrowTransactions.csv
+        ExportBorrowedItemsToCSV(transactionID, StudentNumber, dateTimeString, transactionsFilePath, borrowedItemsTable);
+
+        // Update equipment data in equipments.csv
+        ExportEquipmentDataToCSV(equipmentFilePath, equipmentTable);
+
+        // Show the Transaction ID
+        String^ message = String::Format("Please remember your Transaction ID: {0}", transactionID);
+        MessageBox::Show(message, "Finalization Successful", MessageBoxButtons::OK, MessageBoxIcon::Information);
+
+        // Show the InventoryManager form
+        InventoryManager->Show();
+
+        // Clear the borrowed items table after checkout
+        borrowedItemsTable->Clear();
     }
 
-    void exportBorrowedItemsToCSV(String^ studentNumber, String^ transactionID, const std::string& filePath, DataTable^ borrowedItemsTable) {
+private:
+    // Function to generate a Transaction ID using the current date and time
+    static String^ GenerateTransactionID() {
         DateTime now = DateTime::Now;
-        String^ dateTime = now.ToString("yyyy-MM-dd HH:mm:ss");
+        return now.ToString("yyyyMMddHHmm");
+    }
 
-        std::ofstream outFile;
-        outFile.open(filePath, std::ios::app); // std::ios::app appends to the end of the file
-
-        if (!outFile.is_open()) {
-            cerr << "File couldn't be opened at " << filePath << endl;
+    // Function to export borrowed items to a CSV file
+    static void ExportBorrowedItemsToCSV(String^ transactionID, String^ studentNumber, String^ dateTimeString, std::string transactionsFilePath, DataTable^ borrowedItemsTable) {
+        std::ofstream file(transactionsFilePath, std::ios::app); // Open file in append mode
+        if (!file.is_open()) {
+            MessageBox::Show("Failed to open transactions file.", "File Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
             return;
         }
 
         for each (DataRow ^ row in borrowedItemsTable->Rows) {
-            outFile << msclr::interop::marshal_as<std::string>(transactionID) << ","
+            file << msclr::interop::marshal_as<std::string>(transactionID) << ","
                 << msclr::interop::marshal_as<std::string>(studentNumber) << ","
-                << msclr::interop::marshal_as<std::string>(dateTime) << ","
+                << msclr::interop::marshal_as<std::string>(dateTimeString) << ","
                 << msclr::interop::marshal_as<std::string>(row["ID"]->ToString()) << ","
                 << msclr::interop::marshal_as<std::string>(row["Name"]->ToString()) << ","
                 << msclr::interop::marshal_as<std::string>(row["Type"]->ToString()) << ","
                 << msclr::interop::marshal_as<std::string>(row["Status"]->ToString()) << ","
                 << msclr::interop::marshal_as<std::string>(row["Specs"]->ToString()) << ","
-                << msclr::interop::marshal_as<std::string>(row["Quantity"]->ToString()) << endl;
+                << msclr::interop::marshal_as<std::string>(row["Quantity"]->ToString()) << "\n";
         }
 
-        outFile.close();
+        file.close();
     }
 
-    void exportEquipmentDataToCSV(const string& filePath, System::Data::DataTable^ equipmentTable) {
-        std::ofstream outFile;
-        outFile.open(filePath, std::ios::trunc); // std::ios::trunc overwrites the file
-
-        if (!outFile.is_open()) {
-            cerr << "File couldn't be opened at " << filePath << endl;
+    // Function to update equipment data in a CSV file
+    static void ExportEquipmentDataToCSV(std::string equipmentFilePath, DataTable^ equipmentTable) {
+        std::ofstream file(equipmentFilePath); // Open file in write mode
+        if (!file.is_open()) {
+            MessageBox::Show("Failed to open equipment file.", "File Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
             return;
         }
 
-        // Write the header
-        outFile << "ID,Name,Type,Status,Specs,Quantity" << endl;
+        // Write headers
+        file << "ID,Name,Type,Status,Specs,Quantity\n";
 
         for each (DataRow ^ row in equipmentTable->Rows) {
-            outFile << msclr::interop::marshal_as<std::string>(row["ID"]->ToString()) << ","
+            file << msclr::interop::marshal_as<std::string>(row["ID"]->ToString()) << ","
                 << msclr::interop::marshal_as<std::string>(row["Name"]->ToString()) << ","
                 << msclr::interop::marshal_as<std::string>(row["Type"]->ToString()) << ","
                 << msclr::interop::marshal_as<std::string>(row["Status"]->ToString()) << ","
                 << msclr::interop::marshal_as<std::string>(row["Specs"]->ToString()) << ","
-                << msclr::interop::marshal_as<std::string>(row["Quantity"]->ToString()) << endl;
+                << msclr::interop::marshal_as<std::string>(row["Quantity"]->ToString()) << "\n";
         }
 
-        outFile.close();
+        file.close();
     }
-
-
-    // Method for when borrow is clicked
-    vector<string> Borrow(String^ id, String^ quantity, bool& found, bool& sufficientStock) {
-        string borrowID = getID(id);
-        string borrowQuantity = getQuantity(quantity);
-
-        // If input is valid it gets input from the file
-        if (BorrowValid()) {
-            ifstream file("C:\\Users\\Keith Naval\\Downloads\\equipments.csv"); // open file path
-            string line;
-            vector<string> borrowedData;
-            found = false;
-
-            while (getline(file, line)) {
-                stringstream ss(line);
-                string currentID, name, type, status, specs, currentQuantity;
-
-                getline(ss, currentID, ',');
-                getline(ss, name, ',');
-                getline(ss, type, ',');
-                getline(ss, status, ',');
-                getline(ss, specs, ',');
-                getline(ss, currentQuantity, ',');
-
-                if (currentID == borrowID) {
-                    found = true;
-                    if (currentQuantity == "0") {
-                        sufficientStock = false;
-                    }
-                    else if (stoi(currentQuantity) >= stoi(borrowQuantity)) {
-                        sufficientStock = true;
-                        borrowedData = { currentID, name, type, status, specs, currentQuantity };
-                    }
-                    else {
-                        sufficientStock = false;
-                    }
-                    break;
-                }
-            }
-
-            file.close();
-            return borrowedData;
-        }
-        return {};
-    }
-
-private:
-    string borrowID = "99999";
-    string borrowQuantity = "-1";
 };
 
 #endif

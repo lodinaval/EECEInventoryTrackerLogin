@@ -2,16 +2,10 @@
 #include "Student.h"
 #include <msclr/marshal_cppstd.h>
 #include <string>
+#include "Faculty.h"
+#include "StringConverter.h"
 
 namespace EECEInventoryTracker {
-
-    static System::String^ converterToString(const std::string& temp) {
-        return gcnew System::String(temp.c_str()); // Converts std::string to System::String^
-    }
-
-    static std::string convertToStdString(System::String^ sysString) {
-        return msclr::interop::marshal_as<std::string>(sysString);
-    }
 
     using namespace System;
     using namespace System::ComponentModel;
@@ -40,12 +34,49 @@ namespace EECEInventoryTracker {
             InitializeComponent();
         }
 
-        StudentForm(Form^ obj1, String^ studentNo)
+        StudentForm(Form^ obj1, String^ idNo)
         {
             InitializeComponent();
             obj4 = obj1;
-            studentNumberLabel->Text = studentNo;
+
+            std::string idNumberStr = msclr::interop::marshal_as<std::string>(idNo);
+            Student MyProfile("C:\\Users\\Keith Naval\\Downloads\\students.csv"); // Load students
+            Faculty MyProfileFaculty("C:\\Users\\Keith Naval\\Downloads\\mapuaFaculty.csv"); //Load faculty
+
+            if (MyProfileFaculty.isFaculty(idNumberStr)) {
+                std::string facultyName = MyProfileFaculty.getName(idNumberStr);
+                studentNameLabel->Text = converterToString(facultyName);
+
+                studentNumberLabel->Text = idNo;
+
+                std::string facultyDepartment = MyProfileFaculty.getDepartment(idNumberStr);
+                label8->Text = "Department";
+                studentProgramLabel->Text = converterToString(facultyDepartment);
+
+                std::string facultyContactInfo = MyProfileFaculty.getContactInfo(idNumberStr);
+                studentContactInfoLabel->Text = converterToString(facultyContactInfo);
+
+                std::string facultyEmail = MyProfileFaculty.getEmail(idNumberStr);
+                studentEmailL->Text = converterToString(facultyEmail);
+            }
+            else {
+                std::string studentName = MyProfile.getName(idNumberStr);
+                studentNameLabel->Text = converterToString(studentName);
+
+                studentNumberLabel->Text = idNo;
+
+                std::string studentProgram = MyProfile.getProgram(idNumberStr);
+                studentProgramLabel->Text = converterToString(studentProgram);
+
+                std::string studentContactInfo = MyProfile.getContactInfo(idNumberStr);
+                studentContactInfoLabel->Text = converterToString(studentContactInfo);
+
+                std::string studentEmail = MyProfile.getEmail(idNumberStr);
+                studentEmailL->Text = converterToString(studentEmail);
+            }
+            
         }
+
 
         StudentForm(Form^ obj1) {
             obj4 = obj1;
@@ -112,9 +143,9 @@ namespace EECEInventoryTracker {
             this->label2->Font = (gcnew System::Drawing::Font(L"Century Gothic", 20.25F, System::Drawing::FontStyle::Bold));
             this->label2->Location = System::Drawing::Point(382, 125);
             this->label2->Name = L"label2";
-            this->label2->Size = System::Drawing::Size(232, 32);
+            this->label2->Size = System::Drawing::Size(162, 32);
             this->label2->TabIndex = 2;
-            this->label2->Text = L"Student Number:";
+            this->label2->Text = L"ID Number:";
             // 
             // studentNumberLabel
             // 
@@ -308,21 +339,7 @@ namespace EECEInventoryTracker {
     }
     private: System::Void StudentForm_Load(System::Object^ sender, System::EventArgs^ e) {
 
-        std::string getStudentNumber = msclr::interop::marshal_as<std::string>(studentNumberLabel->Text);
 
-        Student MyProfile("C:\\Users\\Keith Naval\\Downloads\\students.csv"); // Update with your actual path
-
-        std::string studentName = MyProfile.getName(getStudentNumber);
-        studentNameLabel->Text = converterToString(studentName);
-
-        std::string studentProgram = MyProfile.getProgram(getStudentNumber);
-        studentProgramLabel->Text = converterToString(studentProgram);
-
-        std::string studentContactInfo = MyProfile.getContactInfo(getStudentNumber);
-        studentContactInfoLabel->Text = converterToString(studentContactInfo);
-
-        std::string studentEmail = MyProfile.getEmail(getStudentNumber);
-        studentEmailL->Text = converterToString(studentEmail);
     }
     private: System::Void label4_Click(System::Object^ sender, System::EventArgs^ e) {
     }

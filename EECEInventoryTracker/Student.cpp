@@ -3,10 +3,9 @@
 #include <sstream>
 #include <iostream>
 
-Student::Student() {
-}
+Student::Student(){}
 
-Student::Student(const std::string& filePath) {
+Student::Student(const std::string& filePath){
     loadData(filePath);
 }
 
@@ -17,40 +16,122 @@ void Student::loadData(const std::string& filePath) {
         return;
     }
 
-    std::string line, studentNo, name, program, contactInfo, email, password;
+    std::string line;
+    std::getline(file, line); // Skip the first line (header)
 
-    // Skip the first line (header)
-    std::getline(file, line);
+    int index = 0;
 
-    while (std::getline(file, line)) {
-        std::stringstream ss(line);
-        std::getline(ss, studentNo, ',');
-        std::getline(ss, name, ',');
-        std::getline(ss, program, ',');
-        std::getline(ss, contactInfo, ',');
-        std::getline(ss, email, ',');
-        std::getline(ss, password, ',');
+    while (std::getline(file, line) && index < 1000) { // Assume max students is 1000.
+        std::stringstream ss(line); // String stream allows us to insert and extract from the csv file
+        std::getline(ss, studentData[index].studentNo, ',');
+        std::getline(ss, studentData[index].name, ',');
+        std::getline(ss, studentData[index].program, ',');
+        std::getline(ss, studentData[index].contactInfo, ',');
+        std::getline(ss, studentData[index].email, ',');
+        std::getline(ss, studentData[index].password, ',');
 
-        studentData[studentNo] = { name, program, contactInfo, email, password };
+        index++;
     }
+    studentCount = index;
 }
 
 bool Student::verifyCredentials(const std::string& studentNo, const std::string& password) {
-    return studentData.find(studentNo) != studentData.end() && studentData[studentNo].password == password;
+    for (int i = 0; i < studentCount; ++i) {
+        if (studentData[i].studentNo == studentNo && studentData[i].password == password) {
+            return true;
+        }
+    }
+    return false;
 }
 
 std::string Student::getName(const std::string& studentNo) {
-    return studentData[studentNo].name;
+    for (int i = 0; i < studentCount; ++i) {
+        if (studentData[i].studentNo == studentNo) {
+            return studentData[i].name;
+        }
+    }
+    return "";
 }
 
 std::string Student::getProgram(const std::string& studentNo) {
-    return studentData[studentNo].program;
+    for (int i = 0; i < studentCount; ++i) {
+        if (studentData[i].studentNo == studentNo) {
+            return studentData[i].program;
+        }
+    }
+    return "";
 }
 
 std::string Student::getContactInfo(const std::string& studentNo) {
-    return studentData[studentNo].contactInfo;
+    for (int i = 0; i < studentCount; ++i) {
+        if (studentData[i].studentNo == studentNo) {
+            return studentData[i].contactInfo;
+        }
+    }
+    return "";
 }
 
 std::string Student::getEmail(const std::string& studentNo) {
-    return studentData[studentNo].email;
+    for (int i = 0; i < studentCount; ++i) {
+        if (studentData[i].studentNo == studentNo) {
+            return studentData[i].email;
+        }
+    }
+    return "";
+}
+
+void Student::setName(const std::string& studentNo, const std::string& name) {
+    for (int i = 0; i < studentCount; ++i) {
+        if (studentData[i].studentNo == studentNo) {
+            studentData[i].name = name;
+            break;
+        }
+    }
+}
+
+void Student::setProgram(const std::string& studentNo, const std::string& program) {
+    for (int i = 0; i < studentCount; ++i) {
+        if (studentData[i].studentNo == studentNo) {
+            studentData[i].program = program;
+            break;
+        }
+    }
+}
+
+void Student::setContactInfo(const std::string& studentNo, const std::string& contactInfo) {
+    for (int i = 0; i < studentCount; ++i) {
+        if (studentData[i].studentNo == studentNo) {
+            studentData[i].contactInfo = contactInfo;
+            break;
+        }
+    }
+}
+
+void Student::setEmail(const std::string& studentNo, const std::string& email) {
+    for (int i = 0; i < studentCount; ++i) {
+        if (studentData[i].studentNo == studentNo) {
+            studentData[i].email = email;
+            break;
+        }
+    }
+}
+
+void Student::setPassword(const std::string& studentNo, const std::string& password) {
+    for (int i = 0; i < studentCount; ++i) {
+        if (studentData[i].studentNo == studentNo) {
+            studentData[i].password = password;
+            break;
+        }
+    }
+}
+
+bool Student::isStudent(const std::string& studentNo) {
+    for (int i = 0; i < studentCount; ++i) {
+        if (studentData[i].studentNo == studentNo) {
+            return true;
+            break;
+        }
+        else
+            return false;
+    }
 }

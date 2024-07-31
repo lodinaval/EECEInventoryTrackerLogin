@@ -1,11 +1,8 @@
 #include "Equipment.h"
-#include <fstream>
-#include <sstream>
-#include <iostream>
 
-using namespace std;
-
-Equipment::Equipment() {}
+Equipment::Equipment() {
+    equipmentCount = 0;
+}
 
 Equipment::Equipment(const std::string& filePath) {
     loadData(filePath);
@@ -13,144 +10,174 @@ Equipment::Equipment(const std::string& filePath) {
 
 void Equipment::loadData(const std::string& filePath) {
     std::ifstream file(filePath);
-    if (!file.is_open()) {
-        std::cerr << "Error opening file: " << filePath << std::endl;
-        return;
-    }
-    std::string id, name, type, status, specs, quantity, line;
-    vector<string> maintenanceHistory;
-
-    std::getline(file, line); // Skip header row
+    std::string line;
+    equipmentCount = 0;
 
     while (std::getline(file, line)) {
-        std::stringstream ss(line);
-        std::getline(ss, id, ',');
-        std::getline(ss, name, ',');
-        std::getline(ss, type, ',');
-        std::getline(ss, status, ',');
-        std::getline(ss, specs, ',');
-        std::getline(ss, quantity, ',');
-
-        equipmentData[id] = Equipment(id, name, type, status, specs, quantity);
+        EquipmentData& data = equipmentData[equipmentCount];
+        std::istringstream iss(line);
+        std::getline(iss, data.equipmentId, ',');
+        std::getline(iss, data.equipmentName, ',');
+        std::getline(iss, data.equipmentType, ',');
+        std::getline(iss, data.equipmentStatus, ',');
+        std::getline(iss, data.equipmentSpecs, ',');
+        std::getline(iss, data.equipmentQuantity, ',');
+        equipmentCount++;
     }
 }
 
-Equipment::Equipment(const string& id, const string& name, const string& type, const string& status, const string& specs, const string& quantity) {
-    equipmentId = id;
-    equipmentName = name;
-    equipmentType = type;
-    equipmentStatus = status;
-    equipmentSpecs = specs;
-    equipmentQuantity = quantity;
-}
-
-string Equipment::getId() const {
-    return equipmentId;
-}
-
-string Equipment::getName() const {
-    return equipmentName;
-}
-
-string Equipment::getType() const {
-    return equipmentType;
-}
-
-string Equipment::getStatus() const {
-    return equipmentStatus;
-}
-
-string Equipment::getSpecs() const {
-    return equipmentSpecs;
-}
-
-string Equipment::getQuantity() const {
-    return equipmentQuantity;
-}
-
-vector<string> Equipment::getMaintenanceHistory() const {
-    return maintenanceHistory;
-}
-
-void Equipment::setId(const string& id) {
-    equipmentId = id;
-}
-
-void Equipment::setName(const string& name) {
-    equipmentName = name;
-}
-
-void Equipment::setType(const string& type) {
-    equipmentType = type;
-}
-
-void Equipment::updateStatus(const string& status) {
-    equipmentStatus = status;
-}
-
-void Equipment::setSpecs(const string& specs) {
-    equipmentSpecs = specs;
-}
-
-void Equipment::setQuantity(const string& quantity) {
-    equipmentQuantity = quantity;
-}
-
-void Equipment::addMaintenanceRecord(const string& record) {
-    maintenanceHistory.push_back(record);
-}
-
-void Equipment::checkOut() {
-    if (equipmentStatus == "available") {
-        equipmentStatus = "in use";
-        cout << equipmentName << " checked out successfully." << endl;
+string Equipment::getId(const std::string& id) const {
+    for (int i = 0; i < equipmentCount; ++i) {
+        if (equipmentData[i].equipmentId == id) {
+            return equipmentData[i].equipmentId;
+        }
     }
-    else {
-        cout << equipmentName << " is not available for check out." << endl;
+    return "";
+}
+
+string Equipment::getName(const std::string& id) const {
+    for (int i = 0; i < equipmentCount; ++i) {
+        if (equipmentData[i].equipmentId == id) {
+            return equipmentData[i].equipmentName;
+        }
+    }
+    return "";
+}
+
+string Equipment::getType(const std::string& id) const {
+    for (int i = 0; i < equipmentCount; ++i) {
+        if (equipmentData[i].equipmentId == id) {
+            return equipmentData[i].equipmentType;
+        }
+    }
+    return "";
+}
+
+string Equipment::getStatus(const std::string& id) const {
+    for (int i = 0; i < equipmentCount; ++i) {
+        if (equipmentData[i].equipmentId == id) {
+            return equipmentData[i].equipmentStatus;
+        }
+    }
+    return "";
+}
+
+string Equipment::getSpecs(const std::string& id) const {
+    for (int i = 0; i < equipmentCount; ++i) {
+        if (equipmentData[i].equipmentId == id) {
+            return equipmentData[i].equipmentSpecs;
+        }
+    }
+    return "";
+}
+
+string Equipment::getQuantity(const std::string& id) const {
+    for (int i = 0; i < equipmentCount; ++i) {
+        if (equipmentData[i].equipmentId == id) {
+            return equipmentData[i].equipmentQuantity;
+        }
+    }
+    return "";
+}
+
+// Mutators
+void Equipment::setId(const std::string& id, const string& newid) {
+    for (int i = 0; i < equipmentCount; ++i) {
+        if (equipmentData[i].equipmentId == id) {
+            equipmentData[i].equipmentId = newid;
+        }
     }
 }
 
-void Equipment::returnEquipment() {
-    if (equipmentStatus == "in use") {
-        equipmentStatus = "available";
-        cout << equipmentName << " returned successfully." << endl;
-    }
-    else {
-        cout << equipmentName << " is not checked out." << endl;
+void Equipment::setName(const std::string& id, const string& newname) {
+    for (int i = 0; i < equipmentCount; ++i) {
+        if (equipmentData[i].equipmentId == id) {
+            equipmentData[i].equipmentName = newname;
+        }
     }
 }
 
-void Equipment::getDetails() const {
-    cout << "ID: " << equipmentId << endl;
-    cout << "Name: " << equipmentName << endl;
-    cout << "Type: " << equipmentType << endl;
-    cout << "Status: " << equipmentStatus << endl;
-    cout << "Specs: " << equipmentSpecs << endl;
-    cout << "Quantity: " << equipmentQuantity << endl;
-    cout << "Maintenance History: ";
-    for (const auto& record : maintenanceHistory) {
-        cout << record << " ";
+void Equipment::setType(const std::string& id, const string& newtype) {
+    for (int i = 0; i < equipmentCount; ++i) {
+        if (equipmentData[i].equipmentId == id) {
+            equipmentData[i].equipmentType = newtype;
+        }
     }
-    cout << endl;
 }
 
-void Equipment::generateReport() const {
-    cout << "Equipment Report for " << equipmentName << ":" << endl;
-    getDetails();
+void Equipment::updateStatus(const std::string& id, const string& newstatus) {
+    for (int i = 0; i < equipmentCount; ++i) {
+        if (equipmentData[i].equipmentId == id) {
+            equipmentData[i].equipmentStatus = newstatus;
+        }
+    }
+}
+
+void Equipment::setSpecs(const std::string& id, const string& newspecs) {
+    for (int i = 0; i < equipmentCount; ++i) {
+        if (equipmentData[i].equipmentId == id) {
+            equipmentData[i].equipmentSpecs = newspecs;
+        }
+    }
+}
+
+void Equipment::setQuantity(const std::string& id, const string& newquantity) {
+    for (int i = 0; i < equipmentCount; ++i) {
+        if (equipmentData[i].equipmentId == id) {
+            equipmentData[i].equipmentQuantity = newquantity;
+        }
+    }
 }
 
 void Equipment::addEquipment(const string& id, const string& name, const string& type, const string& status, const string& specs, const string& quantity, const string& filePath) {
     std::ofstream file(filePath, std::ios::app);
-    if (!file.is_open()) {
-        std::cerr << "Error opening file" << filePath << std::endl;
-        return;
-    }
     file << id << "," << name << "," << type << "," << status << "," << specs << "," << quantity << std::endl;
     file.close();
-
-    equipmentData[id] = Equipment(id, name, type, status, specs, quantity);
+    loadData(filePath);
 }
 
-const std::unordered_map<std::string, Equipment>& Equipment::getEquipmentData() const {
-    return equipmentData;
+bool Equipment::verifyEquipment(const string& id, const string& name) {
+    for (int i = 0; i < equipmentCount; ++i) {
+        if (equipmentData[i].equipmentId == id && equipmentData[i].equipmentName == name) {
+            return true;
+        }
+    }
+    return false;
 }
+
+void Equipment::updateCsv(const std::string& id, const std::string& name, const std::string& type, const std::string& status, const std::string& specs, const std::string& quantity, const std::string& filePath) {
+    std::ofstream file(filePath, std::ios::trunc);
+    for (int i = 0; i < equipmentCount; ++i) {
+        if (equipmentData[i].equipmentId == id) {
+            equipmentData[i].equipmentName = name;
+            equipmentData[i].equipmentType = type;
+            equipmentData[i].equipmentStatus = status;
+            equipmentData[i].equipmentSpecs = specs;
+            equipmentData[i].equipmentQuantity = quantity;
+        }
+        file << equipmentData[i].equipmentId << "," << equipmentData[i].equipmentName << "," << equipmentData[i].equipmentType << "," << equipmentData[i].equipmentStatus << "," << equipmentData[i].equipmentSpecs << "," << equipmentData[i].equipmentQuantity << std::endl;
+    }
+    file.close();
+    loadData(filePath);
+}
+
+void Equipment::removeEntryFromCsv(const std::string& id, const std::string& filePath) {
+    std::ofstream file(filePath, std::ios::trunc);
+    for (int i = 0; i < equipmentCount; ++i) {
+        if (equipmentData[i].equipmentId != id) {
+            file << equipmentData[i].equipmentId << "," << equipmentData[i].equipmentName << "," << equipmentData[i].equipmentType << "," << equipmentData[i].equipmentStatus << "," << equipmentData[i].equipmentSpecs << "," << equipmentData[i].equipmentQuantity << std::endl;
+        }
+    }
+    file.close();
+    loadData(filePath);
+}
+
+bool Equipment::isEquipmentInCSV(const std::string& id) {
+    for (int i = 0; i < equipmentCount; ++i) {
+        if (equipmentData[i].equipmentId == id) {
+            return true;
+        }
+    }
+    return false;
+}
+

@@ -1,8 +1,10 @@
   EECEInventoryTracker.EquipmentForm.resources - Embedded, ContainedInManifestFile, 
   EECEInventoryTracker.InventoryManagerUI.resources - Embedded, ContainedInManifestFile, 
+  EECEInventoryTracker.MaintenanceForm.resources - Embedded, ContainedInManifestFile, 
   EECEInventoryTracker.MyForm.resources - Embedded, ContainedInManifestFile, 
   EECEInventoryTracker.BorrowForm.resources - Embedded, ContainedInManifestFile, 
   EECEInventoryTracker.StudentForm.resources - Embedded, ContainedInManifestFile, 
+  EECEInventoryTracker.Transactions.resources - Embedded, ContainedInManifestFile, 
 ImageRuntimeVersion: v4.0.30319
 Assembly EECEInventoryTracker, Version=0.0.*, Culture=Invariant Language (Invariant Country): 
 	hash=SHA1, flags=PublicKey
@@ -20,6 +22,10 @@ Assembly System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=
 	hash=None, flags=None
 Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
 	hash=None, flags=None
+Class EECEInventoryTracker.EquipmentForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.Windows.Forms.Form
+    Void .ctor(System.Windows.Forms.Form): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
 Class EECEInventoryTracker.StudentForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(System.Windows.Forms.Form): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
@@ -28,10 +34,6 @@ Class EECEInventoryTracker.StudentForm: AutoLayout, AnsiClass, Class, Public, Be
   Fields:
     System.Windows.Forms.Form studentForm : Public
     System.Windows.Forms.Form obj4 : Public
-Class EECEInventoryTracker.EquipmentForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
-  :System.Windows.Forms.Form
-    Void .ctor(System.Windows.Forms.Form): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
 Class EECEInventoryTracker.BorrowForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(System.Windows.Forms.Form, System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
@@ -39,11 +41,26 @@ Class EECEInventoryTracker.BorrowForm: AutoLayout, AnsiClass, Class, Public, Bef
   Fields:
     System.Windows.Forms.Form InventoryManager : Public
     System.String StudentNumber : Public
+Class EECEInventoryTracker.Transactions: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.Windows.Forms.Form
+    Void .ctor(System.Windows.Forms.Form): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    System.Windows.Forms.Form previousForm : Public
+Class EECEInventoryTracker.MaintenanceForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.Windows.Forms.Form
+    Void .ctor(System.Windows.Forms.Form): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
 Class EECEInventoryTracker.InventoryManagerUI: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(System.Windows.Forms.Form): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
     Void .ctor(System.Windows.Forms.Form, System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    Boolean isFaculty : Public
+  Properties:
+    System.String StudentNumber 'get set' : 
+  Methods:
+    get_StudentNumber(): PrivateScope, Public, HideBySig, SpecialName
+    set_StudentNumber(String): PrivateScope, Public, HideBySig, SpecialName
 Class EECEInventoryTracker.MyForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName

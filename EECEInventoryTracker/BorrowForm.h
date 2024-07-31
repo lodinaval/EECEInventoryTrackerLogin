@@ -1,9 +1,9 @@
 #pragma once
-#include "Equipment.h"
-#include <fstream>
-#include <msclr/marshal_cppstd.h>
-#include <sstream>
 #include "Borrow.h"
+#include "Faculty.h"
+#include "Student.h"
+#include <msclr/marshal_cppstd.h>
+#include "StringConverter.h"
 
 namespace EECEInventoryTracker {
 
@@ -30,15 +30,29 @@ namespace EECEInventoryTracker {
     public:
         String^ StudentNumber;
 
-        BorrowForm(Form^ inventoryManagerObj, String^ StudentNumObj)
+        BorrowForm(Form^ inventoryManagerObj, String^ StudentNum)
         {
             InitializeComponent();
             LoadEquipmentData();
             InitializeBorrowedItemsGrid();
             InventoryManager = inventoryManagerObj;
-            StudentNumber = StudentNumObj;
+            StudentNumber = StudentNum; // Assign the student number
 
+            std::string idstr = convertToStdString(StudentNum); // Convert System::String^ to std::string
+            Faculty faculty("C:\\Users\\Keith Naval\\Downloads\\mapuaFaculty.csv"); // Load faculty data
+            Student student("C:\\Users\\Keith Naval\\Downloads\\students.csv"); // Load student data
+
+            // Set the student/faculty name in the label
+            if (faculty.isFaculty(idstr)) {
+                std::string facultyNameStr = faculty.getName(idstr);
+                studentNumberLabel->Text = converterToString(facultyNameStr);
+            }
+            else {
+                std::string studentNameStr = student.getName(idstr);
+                studentNumberLabel->Text = converterToString(studentNameStr);
+            }
         }
+
 
     protected:
         ~BorrowForm()
@@ -153,9 +167,9 @@ namespace EECEInventoryTracker {
                    static_cast<System::Byte>(0)));
                this->label5->Location = System::Drawing::Point(487, 30);
                this->label5->Name = L"label5";
-               this->label5->Size = System::Drawing::Size(138, 19);
+               this->label5->Size = System::Drawing::Size(123, 19);
                this->label5->TabIndex = 21;
-               this->label5->Text = L"Student Number:";
+               this->label5->Text = L"Student Name:";
                // 
                // searchLabel
                // 
@@ -238,7 +252,6 @@ namespace EECEInventoryTracker {
                this->labelQuantity->Size = System::Drawing::Size(46, 13);
                this->labelQuantity->TabIndex = 19;
                this->labelQuantity->Text = L"Quantity";
-               this->labelQuantity->Click += gcnew System::EventHandler(this, &BorrowForm::labelQuantity_Click);
                // 
                // borrowQuantity
                // 
@@ -247,7 +260,6 @@ namespace EECEInventoryTracker {
                this->borrowQuantity->Name = L"borrowQuantity";
                this->borrowQuantity->Size = System::Drawing::Size(44, 24);
                this->borrowQuantity->TabIndex = 18;
-               this->borrowQuantity->TextChanged += gcnew System::EventHandler(this, &BorrowForm::borrowQuantity_TextChanged);
                // 
                // label2
                // 
@@ -257,7 +269,6 @@ namespace EECEInventoryTracker {
                this->label2->Size = System::Drawing::Size(18, 13);
                this->label2->TabIndex = 17;
                this->label2->Text = L"ID";
-               this->label2->Click += gcnew System::EventHandler(this, &BorrowForm::label2_Click);
                // 
                // borrowID
                // 
@@ -266,7 +277,6 @@ namespace EECEInventoryTracker {
                this->borrowID->Name = L"borrowID";
                this->borrowID->Size = System::Drawing::Size(91, 24);
                this->borrowID->TabIndex = 16;
-               this->borrowID->TextChanged += gcnew System::EventHandler(this, &BorrowForm::borrowID_TextChanged);
                // 
                // panel1
                // 
@@ -302,7 +312,6 @@ namespace EECEInventoryTracker {
                this->label1->Size = System::Drawing::Size(224, 25);
                this->label1->TabIndex = 18;
                this->label1->Text = L"List of Borrowed Items";
-               this->label1->Click += gcnew System::EventHandler(this, &BorrowForm::label1_Click);
                // 
                // timer1
                // 
@@ -323,8 +332,7 @@ namespace EECEInventoryTracker {
                // 
                // checkOutButton
                // 
-               this->checkOutButton->Font = (gcnew System::Drawing::Font(L"Century Gothic", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-                   static_cast<System::Byte>(0)));
+               this->checkOutButton->Font = (gcnew System::Drawing::Font(L"Century Gothic", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
                this->checkOutButton->Location = System::Drawing::Point(816, 518);
                this->checkOutButton->Name = L"checkOutButton";
                this->checkOutButton->Size = System::Drawing::Size(148, 38);
@@ -366,7 +374,6 @@ namespace EECEInventoryTracker {
     private: System::Void dateLabel_Click(System::Object^ sender, System::EventArgs^ e) {
     }
     private: System::Void BorrowForm_Load(System::Object^ sender, System::EventArgs^ e) {
-        studentNumberLabel->Text = StudentNumber; //Initializes Student Number to Label
         DateTime dateTime = DateTime::Now;
         dateLabel->Text = dateTime.ToLongDateString(); //Date
         timeLabel->Text = dateTime.ToLongTimeString(); //Time
@@ -379,28 +386,27 @@ namespace EECEInventoryTracker {
         timeLabel->Text = timeNow.ToLongTimeString();
     }
     private: System::Void LoadEquipmentData() {
-        equipmentTable = gcnew DataTable();
-        equipmentTable->Columns->Add("ID");
-        equipmentTable->Columns->Add("Name");
-        equipmentTable->Columns->Add("Type");
-        equipmentTable->Columns->Add("Status");
-        equipmentTable->Columns->Add("Specs");
-        equipmentTable->Columns->Add("Quantity");
+        Equipment equipment("C:\\Users\\Keith Naval\\Downloads\\equipments.csv");
+        DataTable^ dt = gcnew DataTable(); // Create new table
+        dt->Columns->Add("ID");
+        dt->Columns->Add("Name");
+        dt->Columns->Add("Type");
+        dt->Columns->Add("Status");
+        dt->Columns->Add("Specs");
+        dt->Columns->Add("Quantity");
 
-        Equipment equipment("C:\\Users\\Keith Naval\\Downloads\\equipments.csv"); // Update with your actual path
-
-        for (const auto& item : equipment.getEquipmentData()) {
-            auto equipmentInfo = item.second;
-            DataRow^ row = equipmentTable->NewRow();
-            row["ID"] = gcnew String(item.first.c_str());
-            row["Name"] = gcnew String(equipmentInfo.getName().c_str());
-            row["Type"] = gcnew String(equipmentInfo.getType().c_str());
-            row["Status"] = gcnew String(equipmentInfo.getStatus().c_str());
-            row["Specs"] = gcnew String(equipmentInfo.getSpecs().c_str());
-            row["Quantity"] = gcnew String(equipmentInfo.getQuantity().c_str());
-            equipmentTable->Rows->Add(row);
+        for (int i = 0; i < equipment.equipmentCount; ++i) {
+            DataRow^ row = dt->NewRow();
+            row["ID"] = gcnew String(equipment.getId(equipment.equipmentData[i].equipmentId).c_str());
+            row["Name"] = gcnew String(equipment.getName(equipment.equipmentData[i].equipmentId).c_str());
+            row["Type"] = gcnew String(equipment.getType(equipment.equipmentData[i].equipmentId).c_str());
+            row["Status"] = gcnew String(equipment.getStatus(equipment.equipmentData[i].equipmentId).c_str());
+            row["Specs"] = gcnew String(equipment.getSpecs(equipment.equipmentData[i].equipmentId).c_str());
+            row["Quantity"] = gcnew String(equipment.getQuantity(equipment.equipmentData[i].equipmentId).c_str());
+            dt->Rows->Add(row);
         }
 
+        equipmentTable = dt;
         dataGridView1->DataSource = equipmentTable;
     }
     private: System::Void InitializeBorrowedItemsGrid() {
@@ -414,51 +420,9 @@ namespace EECEInventoryTracker {
         borrowedItemsGrid->DataSource = borrowedItemsTable;
     }
     private: System::Void borrowButton_Click(System::Object^ sender, System::EventArgs^ e) {
-        Stock stock; // Create a random object
-        stock.getID(borrowID->Text);
-        stock.getQuantity(borrowQuantity->Text); // Assign textBox values to object.
-        if (!stock.BorrowValid()) { // Check if inputs are valid
-            MessageBox::Show("Please input valid values in all the required fields: ID, Quantity", "Input Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
-            return;
-        }
-        bool found = false;
-        bool sufficientStock = false;
-        auto borrowedData = stock.Borrow(borrowID->Text, borrowQuantity->Text, found, sufficientStock);
-        if (!found) {
-            MessageBox::Show("ID not found in the equipment list.", "ID Not Found", MessageBoxButtons::OK, MessageBoxIcon::Error);
-            return;
-        }
-        if (!sufficientStock) {
-            MessageBox::Show("Not enough stock available.", "Stock Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
-            return;
-        }
-        if (!borrowedData.empty() && sufficientStock && found && stock.BorrowValid()) {
-            DataRow^ row = borrowedItemsTable->NewRow();
-            row["ID"] = gcnew String(borrowedData[0].c_str());
-            row["Name"] = gcnew String(borrowedData[1].c_str());
-            row["Type"] = gcnew String(borrowedData[2].c_str());
-            row["Status"] = gcnew String(borrowedData[3].c_str());
-            row["Specs"] = gcnew String(borrowedData[4].c_str());
-            row["Quantity"] = gcnew String(borrowQuantity->Text);
-
-            // Update quantity in equipmentTable
-            for each (DataRow ^ equipmentRow in equipmentTable->Rows) {
-                if (equipmentRow["ID"]->ToString() == borrowID->Text) {
-                    int currentQuantity = Int32::Parse(equipmentRow["Quantity"]->ToString());
-                    int borrowedQuantity = Int32::Parse(borrowQuantity->Text);
-                    if (borrowedQuantity > currentQuantity) {
-                        MessageBox::Show("Not enough stock available.", "Stock Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
-                        return;
-                    }
-                    equipmentRow["Quantity"] = (currentQuantity - borrowedQuantity).ToString();
-                    break;
-                }
-            }
-
-            borrowedItemsTable->Rows->Add(row);
-            dataGridView1->DataSource = equipmentTable;
-        }
+        Borrow::BorrowEquipment(borrowID, borrowQuantity, equipmentTable, borrowedItemsTable, dataGridView1);
     }
+
     private: System::Void searchBorrowTextBox_TextChanged(System::Object^ sender, System::EventArgs^ e) {
         String^ search = searchBorrowTextBox->Text;
         if (search->Length == 0) {
@@ -470,20 +434,8 @@ namespace EECEInventoryTracker {
         }
     }
     private: System::Void checkOutButton_Click(System::Object^ sender, System::EventArgs^ e) {
-        if (borrowedItemsTable->Rows->Count == 0) {
-            MessageBox::Show("No items have been added to borrow.", "Finalize Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
-            return;
-        }
-        std::string transactionsFilePath = "C:\\Users\\Keith Naval\\Downloads\\borrowTransactions.csv";
-        std::string equipmentFilePath = "C:\\Users\\Keith Naval\\Downloads\\equipments.csv";
-        this->Hide(); //Hides current form
-        Stock checkOut; //Creates temp object
-        String^ transactionID = checkOut.generateTransactionID(); //Generate Transaction ID using Date and Time then Assign to System String transactionID
-        String^ message = String::Format("Please remember your Transaction ID: {0}", transactionID); //Concatenates String and Variable (System Version)
-        checkOut.exportBorrowedItemsToCSV(StudentNumber, transactionID, transactionsFilePath, borrowedItemsTable); //Exports BorrowedItems to borrowedTransactions.csv
-        checkOut.exportEquipmentDataToCSV(equipmentFilePath, equipmentTable); //Updates equipment.csv with BorrowedItems deducted.
-        MessageBox::Show(message, "Finalization Successful", MessageBoxButtons::OK, MessageBoxIcon::Information); //MessageBox
-        InventoryManager->Show();
+        Borrow::CheckOut(borrowedItemsTable, equipmentTable, InventoryManager, StudentNumber);
+        this->Hide();
     }
 private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
 }

@@ -127,18 +127,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Borrow.cpp" />
     <ClCompile Include="Equipment.cpp" />
+    <ClCompile Include="Faculty.cpp" />
     <ClCompile Include="InventoryManagerUI.cpp" />
+    <ClCompile Include="MaintenanceForm.cpp" />
     <ClCompile Include="MyForm.cpp" />
-    <ClCompile Include="StockForm.cpp" />
     <ClCompile Include="Student.cpp" />
+    <ClCompile Include="Transactions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Equipment.h" />
     <ClInclude Include="EquipmentForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="Faculty.h" />
     <ClInclude Include="InventoryManagerUI.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="Maintenance.h" />
+    <ClInclude Include="MaintenanceForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="MyForm.h">
@@ -147,9 +155,14 @@
     <ClInclude Include="Borrow.h" />
     <ClInclude Include="BorrowForm.h">
       <FileType>CppForm</FileType>
+      <DeploymentContent>false</DeploymentContent>
     </ClInclude>
+    <ClInclude Include="StringConverter.h" />
     <ClInclude Include="Student.h" />
     <ClInclude Include="StudentForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="Transactions.h">
       <FileType>CppForm</FileType>
     </ClInclude>
   </ItemGroup>
@@ -160,6 +173,9 @@
     <EmbeddedResource Include="InventoryManagerUI.resx">
       <DependentUpon>InventoryManagerUI.h</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MaintenanceForm.resx">
+      <DependentUpon>MaintenanceForm.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MyForm.resx">
       <DependentUpon>MyForm.h</DependentUpon>
     </EmbeddedResource>
@@ -169,8 +185,13 @@
     <EmbeddedResource Include="StudentForm.resx">
       <DependentUpon>StudentForm.h</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Transactions.resx">
+      <DependentUpon>Transactions.h</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\Downloads\EECE Logo.ico" />
+    <Image Include="..\..\..\..\Downloads\eeceLogoBig.png" />
     <Image Include="..\..\..\..\Downloads\trash-bin-icon.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

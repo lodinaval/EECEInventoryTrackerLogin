@@ -26,7 +26,6 @@ namespace EECEInventoryTracker {
             InitializeComponent();
             LoadEquipmentData();
             InventoryManager = inventoryManagerObj;
-
         }
 
     protected:
@@ -37,9 +36,17 @@ namespace EECEInventoryTracker {
                 delete components;
             }
         }
-
     private: System::Windows::Forms::DataGridView^ equipmentGridView;
-           
+    protected:
+
+    protected:
+
+    protected:
+
+    protected:
+
+
+
     protected:
 
     private:
@@ -66,87 +73,30 @@ namespace EECEInventoryTracker {
 
            System::ComponentModel::Container^ components;
 
-           void LoadEquipmentData() {
-               Equipment equipment("C:\\Users\\Keith Naval\\Downloads\\equipments.csv"); // Update with your actual path
-               DataTable^ dt = gcnew DataTable();
-               dt->Columns->Add("ID");
-               dt->Columns->Add("Name");
-               dt->Columns->Add("Type");
-               dt->Columns->Add("Status");
-               dt->Columns->Add("Specs");
-               dt->Columns->Add("Quantity");
+    private: System::Void LoadEquipmentData() {
+        Equipment equipment("C:\\Users\\Keith Naval\\Downloads\\equipments.csv"); // Update with your actual path
+        DataTable^ dt = gcnew DataTable(); // Create new table
+        dt->Columns->Add("ID");
+        dt->Columns->Add("Name");
+        dt->Columns->Add("Type");
+        dt->Columns->Add("Status");
+        dt->Columns->Add("Specs");
+        dt->Columns->Add("Quantity");
 
-               for (const auto& item : equipment.getEquipmentData()) {
-                   auto equipmentInfo = item.second;
-                   DataRow^ row = dt->NewRow();
-                   row["ID"] = gcnew String(item.first.c_str());
-                   row["Name"] = gcnew String(equipmentInfo.getName().c_str());
-                   row["Type"] = gcnew String(equipmentInfo.getType().c_str());
-                   row["Status"] = gcnew String(equipmentInfo.getStatus().c_str());
-                   row["Specs"] = gcnew String(equipmentInfo.getSpecs().c_str());
-                   row["Quantity"] = gcnew String(equipmentInfo.getQuantity().c_str());
-                   dt->Rows->Add(row);
-               }
+        for (int i = 0; i < equipment.equipmentCount; ++i) {
+            DataRow^ row = dt->NewRow();
+            row["ID"] = gcnew String(equipment.equipmentData[i].equipmentId.c_str());
+            row["Name"] = gcnew String(equipment.equipmentData[i].equipmentName.c_str());
+            row["Type"] = gcnew String(equipment.equipmentData[i].equipmentType.c_str());
+            row["Status"] = gcnew String(equipment.equipmentData[i].equipmentStatus.c_str());
+            row["Specs"] = gcnew String(equipment.equipmentData[i].equipmentSpecs.c_str());
+            row["Quantity"] = gcnew String(equipment.equipmentData[i].equipmentQuantity.c_str());
+            dt->Rows->Add(row);
+        }
 
-               equipmentGridView->DataSource = dt;
+        equipmentGridView->DataSource = dt;
+    }
 
-               // Add delete button column only if it doesn't exist
-               if (equipmentGridView->Columns["deleteButtonColumn"] == nullptr) {
-                   System::Windows::Forms::DataGridViewButtonColumn^ deleteButtonColumn = gcnew System::Windows::Forms::DataGridViewButtonColumn();
-                   deleteButtonColumn->HeaderText = "Delete";
-                   deleteButtonColumn->Name = "deleteButtonColumn";
-                   deleteButtonColumn->Text = "Delete";
-                   deleteButtonColumn->UseColumnTextForButtonValue = true;
-                   equipmentGridView->Columns->Add(deleteButtonColumn);
-               }
-           }
-
-           void UpdateCsv(const std::string& id, const std::string& name, const std::string& type, const std::string& status, const std::string& specs, const std::string& quantity) {
-               std::ifstream file("C:\\Users\\Keith Naval\\Downloads\\equipments.csv");
-               std::ofstream tempFile("temp.csv");
-               std::string line;
-
-               while (std::getline(file, line)) {
-                   std::stringstream ss(line);
-                   std::string currentId;
-                   std::getline(ss, currentId, ',');
-
-                   if (currentId == id) {
-                       tempFile << id << "," << name << "," << type << "," << status << "," << specs << "," << quantity << std::endl;
-                   }
-                   else {
-                       tempFile << line << std::endl;
-                   }
-               }
-
-               file.close();
-               tempFile.close();
-
-               std::remove("C:\\Users\\Keith Naval\\Downloads\\equipments.csv");
-               std::rename("temp.csv", "C:\\Users\\Keith Naval\\Downloads\\equipments.csv");
-           }
-
-           void removeEntryFromCsv(const std::string& id) {
-               std::ifstream file("C:\\Users\\Keith Naval\\Downloads\\equipments.csv");
-               std::ofstream tempFile("temp.csv");
-               std::string line;
-
-               while (std::getline(file, line)) {
-                   std::stringstream ss(line);
-                   std::string currentId;
-                   std::getline(ss, currentId, ',');
-
-                   if (currentId != id) {
-                       tempFile << line << std::endl;
-                   }
-               }
-
-               file.close();
-               tempFile.close();
-
-               std::remove("C:\\Users\\Keith Naval\\Downloads\\equipments.csv");
-               std::rename("temp.csv", "C:\\Users\\Keith Naval\\Downloads\\equipments.csv");
-           }
 
 #pragma region Windows Form Designer generated code
            void InitializeComponent(void)
@@ -399,6 +349,7 @@ namespace EECEInventoryTracker {
                this->Controls->Add(this->panel1);
                this->Controls->Add(this->panel3);
                this->Name = L"EquipmentForm";
+               this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
                this->Text = L"EECE Inventory Tracker | Equipment";
                this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &EquipmentForm::EquipmentForm_FormClosing);
                this->Load += gcnew System::EventHandler(this, &EquipmentForm::EquipmentForm_Load);
@@ -413,11 +364,14 @@ namespace EECEInventoryTracker {
            }
 #pragma endregion
     private: System::Void EquipmentForm_Load(System::Object^ sender, System::EventArgs^ e) {
-        LoadEquipmentData();
+        LoadEquipmentData(); //Loads Equipment Data on Equipment Form Load
     }
     private: System::Void panel1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
     }
     private: System::Void addEquipmentButton_Click(System::Object^ sender, System::EventArgs^ e) {
+        Equipment equipment("C:\\Users\\Keith Naval\\Downloads\\equipments.csv");
+
+        //Get inputs from fields and turn to std::string
         std::string addIDstr = msclr::interop::marshal_as<std::string>(addID->Text);
         std::string addNamestr = msclr::interop::marshal_as<std::string>(addName->Text);
         std::string addTypestr = msclr::interop::marshal_as<std::string>(addType->Text);
@@ -425,12 +379,17 @@ namespace EECEInventoryTracker {
         std::string specs = msclr::interop::marshal_as<std::string>(addSpecs->Text);
         std::string quantity = msclr::interop::marshal_as<std::string>(addQuantity->Text);
 
-        if (addIDstr.empty() || addNamestr.empty() || addTypestr.empty() || addStatusstr.empty() || quantity.empty()) {
+        
+        if (addIDstr.empty() || addNamestr.empty() || addTypestr.empty() || addStatusstr.empty() || quantity.empty()) { //Checks if fields are empty
             MessageBox::Show("Please fill in all the required fields: ID, Name, Type, Status, Quantity.", "Input Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
             return;
         }
+        if (equipment.isEquipmentInCSV(addIDstr)) { //Checks if ID is already in datagrid.
+            MessageBox::Show("ID Conflict, please change the ID number.", "Input Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+            return;
+        }
 
-        Equipment equipment;
+
         equipment.addEquipment(addIDstr, addNamestr, addTypestr, addStatusstr, specs, quantity, "C:\\Users\\Keith Naval\\Downloads\\equipments.csv");
         LoadEquipmentData();
         equipmentGridView->FirstDisplayedScrollingRowIndex = equipmentGridView->RowCount - 1;
@@ -439,7 +398,8 @@ namespace EECEInventoryTracker {
         if (e->ColumnIndex == equipmentGridView->Columns["deleteButtonColumn"]->Index && e->RowIndex >= 0) {
             String^ id = equipmentGridView->Rows[e->RowIndex]->Cells["ID"]->Value->ToString();
             std::string idStr = msclr::interop::marshal_as<std::string>(id);
-            removeEntryFromCsv(idStr);
+            Equipment equipment;
+            equipment.removeEntryFromCsv(idStr, "C:\\Users\\Keith Naval\\Downloads\\equipments.csv");
             LoadEquipmentData();
         }
     }
@@ -452,7 +412,8 @@ namespace EECEInventoryTracker {
             std::string status = msclr::interop::marshal_as<std::string>(row->Cells["Status"]->Value->ToString());
             std::string specs = msclr::interop::marshal_as<std::string>(row->Cells["Specs"]->Value->ToString());
             std::string quantity = msclr::interop::marshal_as<std::string>(row->Cells["Quantity"]->Value->ToString());
-            UpdateCsv(id, name, type, status, specs, quantity);
+            Equipment equipment;
+            equipment.updateCsv(id, name, type, status, specs, quantity, "C:\\Users\\Keith Naval\\Downloads\\equipments.csv");
         }
     }
     private: System::Void panel2_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {

@@ -27,7 +27,16 @@
     <ClCompile Include="Equipment.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StockForm.cpp">
+    <ClCompile Include="Faculty.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Borrow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Transactions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MaintenanceForm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,9 +65,30 @@
     <ClInclude Include="Borrow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Faculty.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StringConverter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Transactions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Maintenance.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MaintenanceForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\..\Downloads\trash-bin-icon.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Downloads\EECE Logo.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Downloads\eeceLogoBig.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

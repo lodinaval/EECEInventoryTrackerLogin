@@ -1,5 +1,4 @@
 #include "MyForm.h"
-
 using namespace System;
 using namespace System::Windows::Forms;
 using namespace EECEInventoryTracker;
@@ -8,6 +7,6 @@ using namespace std;
 
 int main() {
 
-	Application::Run(gcnew MyForm());
+	Application::Run(gcnew MyForm);
 	return 0;
 }
